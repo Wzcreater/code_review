@@ -2,6 +2,7 @@ package tphy.peis.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import tphy.peis.entity.dto.*;
 
 import java.util.List;
@@ -35,5 +36,26 @@ public interface DjdhsMapper {
     List<SampleExamDetailDTO> querySampleExamDetailDTO(@Param("examNum") String examNum, @Param("sampleId") Long sampleId);
 
     List<CenterConfigurationDTO> getCenterconfigByKey(@Param("configKey")String configKey);
+
     //queryExamCriticalDetail
+
+
+    /*
+     * @Description: 根据体检编号拆线呢顾客类型，类型编码
+     * @Author: ZCZ
+     * @Date: 2023/10/18 15:46
+     * @Params: [examNum]
+     * @Return: java.util.List<tphy.peis.entity.dto.CustomerTypeDTO>
+     **/
+    List<CustomerTypeDTO>  getcustomerTypeList(@Param("examNum")String examNum);
+
+    /**
+     * 公共检查明细表批量插入
+     * @param commonExamDetailDTO
+     * @return
+     */
+    void   insertCommonExamDetail(@Param(value = "commonExamDetailList") List<CommonExamDetailDTO> commonExamDetailDTO);
+
+    @Select("SELECT id FROM users WHERE exam_num = #{examNum}")
+    String  getExamInfoId(@Param("examNum")String examNum);
 }

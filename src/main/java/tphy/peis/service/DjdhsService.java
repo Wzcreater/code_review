@@ -1,6 +1,7 @@
 package tphy.peis.service;
 
 import tphy.peis.entity.dto.CenterConfigurationDTO;
+import tphy.peis.entity.dto.CommonExamDetailDTO;
 import tphy.peis.entity.dto.DepExamResultDTO;
 import tphy.peis.entity.dto.ExaminfoChargingItemDTO;
 
@@ -23,4 +24,8 @@ public interface DjdhsService {
     List<ExaminfoChargingItemDTO> queryWjxmExamInfo(String examNum, String centerNum);
 
     CenterConfigurationDTO getCenterconfigByKey(String paramString1, String centerNum);
+
+
+    void insertCommonExamDetail(List<CommonExamDetailDTO> commonExamDetailDTOList);
+
 }

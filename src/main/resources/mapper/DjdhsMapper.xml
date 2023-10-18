@@ -2,6 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tphy.peis.mapper.DjdhsMapper">
+    <insert id="insertCommonExamDetail">
+        INSERT INTO
+        common_exam_detail(
+        exam_info_id,exam_item_id,exam_doctor,center_num,
+        health_level,exam_result,exam_date,
+        creater,create_time,updater,update_time,
+        charging_item_id,charging_item_code,item_code,exam_result_back,exam_num)
+        VALUES
+        <foreach collection="commonExamDetailList" item="item" separator=",">
+            (#{item.exam_info_id},
+            #{item.exam_item_id},
+            #{item.exam_doctor},
+            #{item.center_num},
+            #{item.health_level},
+            #{item.exam_result},
+            #{item.exam_date},
+            #{item.creater},
+            #{item.create_time},
+            #{item.updater},
+            #{item.update_time},
+            #{item.charging_item_id},
+            #{item.charging_item_code},
+            #{item.item_code},
+            #{item.exam_result_back},
+            #{item.exam_num}
+            )
+        </foreach>
+    </insert>
 
     <select id="queryExamResultByExamNum" resultType="tphy.peis.entity.dto.DepExamResultDTO">
         SELECT
@@ -129,6 +157,7 @@
           AND item_code = #{itemCode}
           AND is_active = 'Y'
     </select>
+
     <select id="queryExamResultByExamNumInView" resultType="tphy.peis.entity.dto.DepExamResultDTO">
         SELECT
         *
@@ -516,6 +545,14 @@
           AND is_active = 'Y'
         ORDER BY
             center_num DESC
+    </select>
+
+    <select id="getcustomerTypeList" resultType="tphy.peis.entity.dto.CustomerTypeDTO">
+        select c.type_name, c.type_code
+        from customer_type c,
+             exam_info e
+        where e.customer_type_id = c.id
+          and e.exam_num =#{examNum}
     </select>
 
 </mapper>

@@ -1,10 +1,14 @@
 package tphy.peis.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 import tphy.peis.conf.reponse.ResponseData;
 import tphy.peis.conf.reponse.SuccessResponseData;
+import tphy.peis.entity.dto.CommonExamDetailDTO;
 import tphy.peis.entity.dto.DepExamResultDTO;
 import tphy.peis.entity.dto.ExaminfoChargingItemDTO;
 import tphy.peis.mapper.DjdhsMapper;
@@ -81,7 +85,7 @@ public class DjdhsController {
 
         for (ExaminfoChargingItemDTO examinfoChargingItemDTO : temp){
             for (DepExamResultDTO depExamResultDTO : jcxx) {
-                if(examinfoChargingItemDTO.getDep_name().equals(depExamResultDTO.getDep_name())){
+                if(examinfoChargingItemDTO.getDep_name().equals(depExamResultDTO.getKsmc())){
                     if(wjxm.isEmpty()){
                         wjxm.add(examinfoChargingItemDTO);
                         break;
@@ -128,7 +132,7 @@ public class DjdhsController {
 
         for (DepExamResultDTO depExamResultDTO : jcxx) {
             for (ExaminfoChargingItemDTO examinfoChargingItemDTO : temp) {
-                if(depExamResultDTO.getDep_name().equals(examinfoChargingItemDTO.getDep_name())){
+                if(depExamResultDTO.getKsmc().equals(examinfoChargingItemDTO.getDep_name())){
                     wjxx.add(depExamResultDTO);
                     break;
                 }
@@ -137,4 +141,12 @@ public class DjdhsController {
         return new SuccessResponseData(wjxx);
     }
 //    addexamDepResult.action
+
+
+
+    @PostMapping("insert")
+    public ResponseData saveCommonExamDetails(@RequestBody  List<CommonExamDetailDTO> commonExamDetailDTOList) throws JsonProcessingException {
+      djdhsService.insertCommonExamDetail(commonExamDetailDTOList);
+      return null;
+    }
 }

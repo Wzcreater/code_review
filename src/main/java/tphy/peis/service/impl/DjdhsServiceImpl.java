@@ -1,6 +1,7 @@
 package tphy.peis.service.impl;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tphy.peis.entity.dto.*;
@@ -8,7 +9,9 @@ import tphy.peis.mapper.DjdhsMapper;
 import tphy.peis.service.DjdhsService;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +25,7 @@ import java.util.List;
  * @Version 1.0
  **/
 @Service
+@Slf4j
 public class DjdhsServiceImpl implements DjdhsService {
 
     @Resource
@@ -121,5 +125,38 @@ public class DjdhsServiceImpl implements DjdhsService {
         }
         System.out.println("配置库 center_configuration " + configKey + " 配置center_num错误！！！");
         return null;
+    }
+
+    @Override
+    public void insertCommonExamDetail(List<CommonExamDetailDTO> commonExamDetailDTOList) {
+        Date currentTime = new Date();
+        // 将时间转换为字符串
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = sdf.format(currentTime);
+
+        ArrayList<CommonExamDetailDTO> details = new ArrayList<>();
+        for (CommonExamDetailDTO commonExamDetailDTO : commonExamDetailDTOList) {
+
+            String examInfoId = djdhsMapper.getExamInfoId(commonExamDetailDTO.getExam_num());
+            commonExamDetailDTO.setExam_info_id(Long.parseLong(examInfoId));
+            commonExamDetailDTO.setExam_item_id(222);
+
+
+            commonExamDetailDTO.setItem_code("");
+            commonExamDetailDTO.setCharging_item_code("");
+            commonExamDetailDTO.setCharging_item_id(1);
+
+
+
+
+            commonExamDetailDTO.setExam_doctor("管理员");
+            commonExamDetailDTO.setCenter_num("20201100037001");
+            commonExamDetailDTO.setHealth_level("Z");
+            commonExamDetailDTO.setExam_result_back(commonExamDetailDTO.getExam_result());
+            commonExamDetailDTO.setExam_date(formattedDate);
+            commonExamDetailDTO.setCreate_time(formattedDate);
+            details.add(commonExamDetailDTO);
+        }
+        djdhsMapper.insertCommonExamDetail(details);
     }
 }
