@@ -6,12 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @Slf4j
-public class Application {
+public class PeisApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(PeisApplication.class, args);
         log.info("********体检PEIS系统启动成功********");
-
     }
 
 }
