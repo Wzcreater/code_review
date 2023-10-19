@@ -62,7 +62,7 @@ public class DjdhsServiceImpl implements DjdhsService {
         if (viewList1.size() > 0) {
             for (DepExamResultDTO vList : viewList1) {
                 if ("检查结论".equals(vList.getItem_name())) {
-                    List<CriticalDTO> criticalList = djdhsMapper.queryCriticalDatasourseByPacsReqCode(vList.getExam_num(),vList.getReq_id());
+                    List<CriticalDTO> criticalList = djdhsMapper.queryCriticalDatasourseByPacsReqCode(vList.getExam_num(), vList.getReq_id());
                     if (criticalList.size() != 0) {
                         vList.setCritical_id(((CriticalDTO) criticalList.get(0)).getId());
                         vList.setData_source(((CriticalDTO) criticalList.get(0)).getData_source());
@@ -74,7 +74,7 @@ public class DjdhsServiceImpl implements DjdhsService {
         List<DepExamResultDTO> examList = djdhsMapper.queryExamResultByExamNum1(examNum);
         if (examList.size() > 0) {
             for (DepExamResultDTO lislist : examList) {
-                List<CriticalDTO> criticalList = djdhsMapper.queryCriticalDatasourseByItemCode(lislist.getExam_num(),lislist.getItem_num());
+                List<CriticalDTO> criticalList = djdhsMapper.queryCriticalDatasourseByItemCode(lislist.getExam_num(), lislist.getItem_num());
                 if (criticalList.size() != 0) {
                     lislist.setCritical_id(((CriticalDTO) criticalList.get(0)).getId());
                     lislist.setData_source(((CriticalDTO) criticalList.get(0)).getData_source());
@@ -91,7 +91,7 @@ public class DjdhsServiceImpl implements DjdhsService {
         for (ExaminfoChargingItemDTO examinfoitem : list) {
             //131为检验科
             if ("131".equals(examinfoitem.getDep_category())) {
-                List<SampleExamDetailDTO> listsample = djdhsMapper.querySampleExamDetailDTO(examinfoitem.getExam_num(),examinfoitem.getSample_id());
+                List<SampleExamDetailDTO> listsample = djdhsMapper.querySampleExamDetailDTO(examinfoitem.getExam_num(), examinfoitem.getSample_id());
                 if (listsample.size() > 0) {
                     examinfoitem.setSample_status(((SampleExamDetailDTO) listsample.get(0)).getStatus());
                     examinfoitem.setSample_statuss(((SampleExamDetailDTO) listsample.get(0)).getStatus_y());
@@ -104,7 +104,7 @@ public class DjdhsServiceImpl implements DjdhsService {
     @Override
     public CenterConfigurationDTO getCenterconfigByKey(String configKey, String centerNum) {
         // 在中心配置表中根据传过来的key查询
-        List<CenterConfigurationDTO> list =djdhsMapper.getCenterconfigByKey(configKey);
+        List<CenterConfigurationDTO> list = djdhsMapper.getCenterconfigByKey(configKey);
         // 如果list为空则配置库缺少该配置
         if (list == null || list.size() == 0) {
             System.out.println("配置库 center_configuration 缺少 " + configKey + " 配置！！！");
@@ -138,7 +138,6 @@ public class DjdhsServiceImpl implements DjdhsService {
         String formattedDate = sdf.format(currentTime);
 
 
-
         // 分离数据
         List<CommonExamDetailDTO> departmentConclusionList = new ArrayList<>();
         List<CommonExamDetailDTO> otherDataList = new ArrayList<>();
@@ -168,6 +167,12 @@ public class DjdhsServiceImpl implements DjdhsService {
 
             if (item1.getDep_name().equals(item2.getDep_name())) {
 
+                if (item1.getExam_result() == null) {
+                    item1.setExam_result("");
+                }
+                if (item2.getExam_result() == null) {
+                    item2.setExam_result("");
+                }
                 String examInfoId = djdhsMapper.getExamInfoId(item1.getExam_num());
                 examdepResult.setExam_info_id(Long.parseLong(examInfoId));
                 examdepResult.setExam_doctor("管理员");
@@ -188,6 +193,9 @@ public class DjdhsServiceImpl implements DjdhsService {
         // 处理公共检查细项
         ArrayList<CommonExamDetailDTO> commonExamDetails = new ArrayList<>();
         for (CommonExamDetailDTO commonExamDetailDTO : otherDataList) {
+            if (commonExamDetailDTO.getExam_result() == null) {
+                commonExamDetailDTO.setExam_result("");
+            }
             String examInfoId = djdhsMapper.getExamInfoId(commonExamDetailDTO.getExam_num());
             commonExamDetailDTO.setExam_info_id(Long.parseLong(examInfoId));
             Map itemCodeByName = djdhsMapper.getItemCodeByName(commonExamDetailDTO.getItem_name());
@@ -216,9 +224,9 @@ public class DjdhsServiceImpl implements DjdhsService {
                 .distinct()
                 .collect(Collectors.toList());
 
-        if (conclusionFlag >0 && insertCommonFlag>0){
+        if (conclusionFlag > 0 && insertCommonFlag > 0) {
             for (String chargingItemCode : chargingItemCodeList) {
-                djdhsMapper.updateExamStatus(commonExamDetails.get(0).getExam_num(),chargingItemCode);
+                djdhsMapper.updateExamStatus(commonExamDetails.get(0).getExam_num(), chargingItemCode);
             }
         }
 
