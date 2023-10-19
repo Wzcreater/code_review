@@ -29,6 +29,7 @@ public class ExamdepResult implements Serializable {
     private String exam_doctor;
 
     private String dep_id;
+    private String dep_name;
 
     private String exam_result_summary;
 

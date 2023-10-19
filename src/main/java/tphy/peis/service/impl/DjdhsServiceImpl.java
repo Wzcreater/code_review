@@ -142,6 +142,7 @@ public class DjdhsServiceImpl implements DjdhsService {
         // 分离数据
         List<CommonExamDetailDTO> departmentConclusionList = new ArrayList<>();
         List<CommonExamDetailDTO> otherDataList = new ArrayList<>();
+
         for (CommonExamDetailDTO conclusion : commonExamDetailDTOList) {
             if ("科室结论".equals(conclusion.getItem_name()) || "专家建议".equals(conclusion.getItem_name())) {
                 departmentConclusionList.add(conclusion);
@@ -153,25 +154,37 @@ public class DjdhsServiceImpl implements DjdhsService {
 
         // 处理科室结论
         ArrayList<ExamdepResult> examdepResultList = new ArrayList<>();
-        for (CommonExamDetailDTO commonExamDetailDTO : departmentConclusionList) {
-            String examInfoId = djdhsMapper.getExamInfoId(commonExamDetailDTO.getExam_num());
-            examdepResult.setExam_info_id(Long.parseLong(examInfoId));
-            examdepResult.setExam_doctor("管理员");
-            Map deptNum = djdhsMapper.getDeptNum(commonExamDetailDTO.getDep_name());
-            examdepResult.setDep_id(deptNum.get("id").toString());
-            examdepResult.setDep_num(deptNum.get("dep_num").toString());
-            examdepResult.setExam_result_summary(commonExamDetailDTO.getExam_result());
-            examdepResult.setCenter_num("20201100037001");
-            examdepResult.setApprover(0);
-            examdepResult.setCreater(0);
-            examdepResult.setCreate_time(formattedDate);
-            examdepResult.setApp_type("1");
-            examdepResult.setExam_num(commonExamDetailDTO.getExam_num());
-            examdepResultList.add(examdepResult);
+        List<CommonExamDetailDTO> list1 = departmentConclusionList.stream()
+                .filter(item -> "科室结论".equals(item.getItem_name()))
+                .collect(Collectors.toList());
+
+        List<CommonExamDetailDTO> list2 = departmentConclusionList.stream()
+                .filter(item -> "专家建议".equals(item.getItem_name()))
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < list1.size(); i++) {
+            CommonExamDetailDTO item1 = list1.get(i);
+            CommonExamDetailDTO item2 = list2.get(i);
+
+            if (item1.getDep_name().equals(item2.getDep_name())) {
+
+                String examInfoId = djdhsMapper.getExamInfoId(item1.getExam_num());
+                examdepResult.setExam_info_id(Long.parseLong(examInfoId));
+                examdepResult.setExam_doctor("管理员");
+                Map deptNum = djdhsMapper.getDeptNum(item1.getDep_name());
+                examdepResult.setDep_id(deptNum.get("id").toString());
+                examdepResult.setDep_num(deptNum.get("dep_num").toString());
+                examdepResult.setExam_result_summary(item1.getExam_result());
+                examdepResult.setSuggestion(item2.getExam_result());
+                examdepResult.setCenter_num("20201100037001");
+                examdepResult.setApprover(0);
+                examdepResult.setCreater(0);
+                examdepResult.setCreate_time(formattedDate);
+                examdepResult.setApp_type("1");
+                examdepResult.setExam_num(item1.getExam_num());
+                examdepResultList.add(examdepResult);
+            }
         }
-
-
-
         // 处理公共检查细项
         ArrayList<CommonExamDetailDTO> commonExamDetails = new ArrayList<>();
         for (CommonExamDetailDTO commonExamDetailDTO : otherDataList) {
