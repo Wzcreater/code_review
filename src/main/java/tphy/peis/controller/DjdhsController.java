@@ -85,12 +85,12 @@ public class DjdhsController {
 
         for (ExaminfoChargingItemDTO examinfoChargingItemDTO : temp) {
             for (DepExamResultDTO depExamResultDTO : jcxx) {
-                if (examinfoChargingItemDTO.getDep_name().equals(depExamResultDTO.getKsmc())) {
+                if (examinfoChargingItemDTO.getItem_name().equals(depExamResultDTO.getKsmc())) {
                     if (wjxm.isEmpty()) {
                         wjxm.add(examinfoChargingItemDTO);
                         break;
                     }
-                    if (!wjxm.get(wjxm.size() - 1).getDep_name().equals(examinfoChargingItemDTO.getDep_name())) {
+                    if (!wjxm.get(wjxm.size() - 1).getDep_name().equals(examinfoChargingItemDTO.getItem_name())) {
                         wjxm.add(examinfoChargingItemDTO);
                     }
                     break;
@@ -148,5 +148,18 @@ public class DjdhsController {
     public String saveCommonExamDetails(@RequestBody List<CommonExamDetailDTO> commonExamDetailDTOList) throws JsonProcessingException {
         djdhsService.insertCommonExamDetail(commonExamDetailDTOList);
         return "保存成功";
+    }
+
+    /*
+     * @Description: 通过体检编号获取患者姓名
+     * @Author: ZCZ
+     * @Date: 2023/10/19 20:06
+     * @Params: [examNum]
+     * @Return: java.lang.String
+     **/
+    @GetMapping("getNameByExamNum")
+    public String getNameByExamNum(String examNum) {
+        String name = djdhsService.getNameByExamNum(examNum);
+        return name;
     }
 }

@@ -21,11 +21,14 @@ import java.util.List;
 public interface DjdhsService {
 
     public List<DepExamResultDTO> getAcceptanceItemResult(String exam_num, String IS_EXAM_RESULT_CITEM);
+
     List<ExaminfoChargingItemDTO> queryWjxmExamInfo(String examNum, String centerNum);
 
     CenterConfigurationDTO getCenterconfigByKey(String paramString1, String centerNum);
 
 
     void insertCommonExamDetail(List<CommonExamDetailDTO> commonExamDetailDTOList);
+
+    String getNameByExamNum(String examNum);
 
 }

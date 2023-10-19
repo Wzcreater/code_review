@@ -223,4 +223,16 @@ public class DjdhsServiceImpl implements DjdhsService {
         }
 
     }
+
+    /*
+     * @Description: 通过体检编号获取患者姓名
+     * @Author: ZCZ
+     * @Date: 2023/10/19 20:07
+     * @Params: [examNum]
+     * @Return: java.lang.String
+     **/
+    @Override
+    public String getNameByExamNum(String examNum) {
+        return djdhsMapper.getNameByExamNum(examNum);
+    }
 }
