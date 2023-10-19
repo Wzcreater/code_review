@@ -7,7 +7,9 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
-
+/**
+ * 公共检查明细
+ */
 @ToString
 @Data
 @AllArgsConstructor
@@ -16,7 +18,7 @@ public class CommonExamDetailDTO implements Serializable {
     private static final long serialVersionUID = 9165522337204355286L;
     private long id;
     private long exam_info_id;
-    private long exam_item_id;
+    private String exam_item_id;
     private String exam_doctor;
     private String center_num;
     private String health_level;
@@ -29,7 +31,7 @@ public class CommonExamDetailDTO implements Serializable {
     private String join_date;
     private String suggestion;
     private String item_name;
-    private long charging_item_id;
+    private String charging_item_id;
     private String exam_num;
     private String item_code;
     private String charging_item_code;

@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Copyright (C) 2023  北京天鹏恒宇科技发展有限公司 版权所有
@@ -129,34 +131,83 @@ public class DjdhsServiceImpl implements DjdhsService {
 
     @Override
     public void insertCommonExamDetail(List<CommonExamDetailDTO> commonExamDetailDTOList) {
+        ExamdepResult examdepResult = new ExamdepResult();
         Date currentTime = new Date();
         // 将时间转换为字符串
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = sdf.format(currentTime);
 
-        ArrayList<CommonExamDetailDTO> details = new ArrayList<>();
-        for (CommonExamDetailDTO commonExamDetailDTO : commonExamDetailDTOList) {
 
+
+        // 分离数据
+        List<CommonExamDetailDTO> departmentConclusionList = new ArrayList<>();
+        List<CommonExamDetailDTO> otherDataList = new ArrayList<>();
+        for (CommonExamDetailDTO conclusion : commonExamDetailDTOList) {
+            if ("科室结论".equals(conclusion.getItem_name()) || "专家建议".equals(conclusion.getItem_name())) {
+                departmentConclusionList.add(conclusion);
+            } else {
+                otherDataList.add(conclusion);
+            }
+        }
+
+
+        // 处理科室结论
+        ArrayList<ExamdepResult> examdepResultList = new ArrayList<>();
+        for (CommonExamDetailDTO commonExamDetailDTO : departmentConclusionList) {
+            String examInfoId = djdhsMapper.getExamInfoId(commonExamDetailDTO.getExam_num());
+            examdepResult.setExam_info_id(Long.parseLong(examInfoId));
+            examdepResult.setExam_doctor("管理员");
+            Map deptNum = djdhsMapper.getDeptNum(commonExamDetailDTO.getDep_name());
+            examdepResult.setDep_id(deptNum.get("id").toString());
+            examdepResult.setDep_num(deptNum.get("dep_num").toString());
+            examdepResult.setExam_result_summary(commonExamDetailDTO.getExam_result());
+            examdepResult.setCenter_num("20201100037001");
+            examdepResult.setApprover(0);
+            examdepResult.setCreater(0);
+            examdepResult.setCreate_time(formattedDate);
+            examdepResult.setApp_type("1");
+            examdepResult.setExam_num(commonExamDetailDTO.getExam_num());
+            examdepResultList.add(examdepResult);
+        }
+
+
+
+        // 处理公共检查细项
+        ArrayList<CommonExamDetailDTO> commonExamDetails = new ArrayList<>();
+        for (CommonExamDetailDTO commonExamDetailDTO : otherDataList) {
             String examInfoId = djdhsMapper.getExamInfoId(commonExamDetailDTO.getExam_num());
             commonExamDetailDTO.setExam_info_id(Long.parseLong(examInfoId));
-            commonExamDetailDTO.setExam_item_id(222);
-
-
-            commonExamDetailDTO.setItem_code("");
-            commonExamDetailDTO.setCharging_item_code("");
-            commonExamDetailDTO.setCharging_item_id(1);
-
-
-
-
+            Map itemCodeByName = djdhsMapper.getItemCodeByName(commonExamDetailDTO.getItem_name());
+            commonExamDetailDTO.setItem_code(itemCodeByName.get("item_num").toString());
+            commonExamDetailDTO.setExam_item_id(itemCodeByName.get("id").toString());
+            Map chargingItemCode = djdhsMapper.getChargingItemCode(commonExamDetailDTO.getDep_name());
+            commonExamDetailDTO.setCharging_item_id(chargingItemCode.get("id").toString());
+            commonExamDetailDTO.setCharging_item_code(chargingItemCode.get("item_code").toString());
             commonExamDetailDTO.setExam_doctor("管理员");
             commonExamDetailDTO.setCenter_num("20201100037001");
             commonExamDetailDTO.setHealth_level("Z");
             commonExamDetailDTO.setExam_result_back(commonExamDetailDTO.getExam_result());
             commonExamDetailDTO.setExam_date(formattedDate);
             commonExamDetailDTO.setCreate_time(formattedDate);
-            details.add(commonExamDetailDTO);
+            commonExamDetails.add(commonExamDetailDTO);
         }
-        djdhsMapper.insertCommonExamDetail(details);
+
+
+        // 科室结论插入
+        Integer conclusionFlag = djdhsMapper.insertExamDeptResult(examdepResultList);
+        // 检查细项插入
+        Integer insertCommonFlag = djdhsMapper.insertCommonExamDetail(commonExamDetails);
+
+        // 根据体检编号和大项 更新大项状态为已检
+        List<String> chargingItemCodeList = commonExamDetails.stream().map(CommonExamDetailDTO::getCharging_item_code)
+                .distinct()
+                .collect(Collectors.toList());
+
+        if (conclusionFlag >0 && insertCommonFlag>0){
+            for (String chargingItemCode : chargingItemCodeList) {
+                djdhsMapper.updateExamStatus(commonExamDetails.get(0).getExam_num(),chargingItemCode);
+            }
+        }
+
     }
 }

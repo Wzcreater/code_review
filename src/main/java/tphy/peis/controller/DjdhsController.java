@@ -1,10 +1,7 @@
 package tphy.peis.controller;
 
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 import tphy.peis.conf.reponse.ResponseData;
 import tphy.peis.conf.reponse.SuccessResponseData;
@@ -25,35 +22,38 @@ import java.util.List;
  *
  * @Author wangzhen
  * @ClassName
- * @Description  导检单回收Controller
+ * @Description 导检单回收Controller
  * @Date 2023-09-04
  * @Version 1.0
  **/
 @RestController
-@RequestMapping(value="peis/djdhs")
+@RequestMapping(value = "peis/djdhs")
 public class DjdhsController {
     @Resource
     private DjdhsMapper djdhsMapper;
     @Resource
     private DjdhsService djdhsService;
+
     /**
      * 批量手动录入
      */
     @GetMapping("plsdlr")
-    public ResponseData plsdlr(String examNum){
+    public ResponseData plsdlr(String examNum) {
 
         List<DepExamResultDTO> depExamResultDTOS = djdhsMapper.queryExamResultByExamNum(examNum);
         return new SuccessResponseData(depExamResultDTOS);
     }
+
     /**
      * 检查细项
      */
     @GetMapping("getJcxx")
-    public ResponseData getJcxx(String examNum){
+    public ResponseData getJcxx(String examNum) {
 
         List<DepExamResultDTO> jcxx = djdhsService.getAcceptanceItemResult(examNum, "Y");
         return new SuccessResponseData(jcxx);
     }
+
     /**
      * 未检项目
      */
@@ -83,14 +83,14 @@ public class DjdhsController {
         //所有未检项目
         List<ExaminfoChargingItemDTO> wjxm = new ArrayList<>();
 
-        for (ExaminfoChargingItemDTO examinfoChargingItemDTO : temp){
+        for (ExaminfoChargingItemDTO examinfoChargingItemDTO : temp) {
             for (DepExamResultDTO depExamResultDTO : jcxx) {
-                if(examinfoChargingItemDTO.getDep_name().equals(depExamResultDTO.getKsmc())){
-                    if(wjxm.isEmpty()){
+                if (examinfoChargingItemDTO.getDep_name().equals(depExamResultDTO.getKsmc())) {
+                    if (wjxm.isEmpty()) {
                         wjxm.add(examinfoChargingItemDTO);
                         break;
                     }
-                    if(!wjxm.get(wjxm.size()-1).getDep_name().equals(examinfoChargingItemDTO.getDep_name())){
+                    if (!wjxm.get(wjxm.size() - 1).getDep_name().equals(examinfoChargingItemDTO.getDep_name())) {
                         wjxm.add(examinfoChargingItemDTO);
                     }
                     break;
@@ -100,11 +100,12 @@ public class DjdhsController {
 
         return new SuccessResponseData(wjxm);
     }
+
     /**
      * 未检细项
      */
     @GetMapping("getWjxx")
-    public ResponseData getWjxx(String examNum){
+    public ResponseData getWjxx(String examNum) {
 
         List<ExaminfoChargingItemDTO> list = djdhsService.queryWjxmExamInfo(examNum, "20201100037001");
 //结束回收页面未检收费项目列表，配置默认排在前边的收费项目.配置收费项目ID，以 , 隔开
@@ -132,7 +133,7 @@ public class DjdhsController {
 
         for (DepExamResultDTO depExamResultDTO : jcxx) {
             for (ExaminfoChargingItemDTO examinfoChargingItemDTO : temp) {
-                if(depExamResultDTO.getKsmc().equals(examinfoChargingItemDTO.getDep_name())){
+                if (depExamResultDTO.getKsmc().equals(examinfoChargingItemDTO.getDep_name())) {
                     wjxx.add(depExamResultDTO);
                     break;
                 }
@@ -143,10 +144,9 @@ public class DjdhsController {
 //    addexamDepResult.action
 
 
-
-    @PostMapping("insert")
-    public ResponseData saveCommonExamDetails(@RequestBody  List<CommonExamDetailDTO> commonExamDetailDTOList) throws JsonProcessingException {
-      djdhsService.insertCommonExamDetail(commonExamDetailDTOList);
-      return null;
+    @PostMapping("batchSaveCommonDetails")
+    public String saveCommonExamDetails(@RequestBody List<CommonExamDetailDTO> commonExamDetailDTOList) throws JsonProcessingException {
+        djdhsService.insertCommonExamDetail(commonExamDetailDTOList);
+        return "保存成功";
     }
 }

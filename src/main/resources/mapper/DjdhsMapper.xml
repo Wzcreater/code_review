@@ -30,46 +30,65 @@
             )
         </foreach>
     </insert>
+    <insert id="insertExamDeptResult">
+        INSERT INTO exam_dep_result
+        ( exam_info_id, exam_doctor, dep_id, exam_result_summary, suggestion, center_num,
+        approver, approve_date, creater, create_time, updater, update_time, Special_setup,
+        dep_num, exam_num, app_type)
+        VALUES
+        <foreach collection="examdepResultList" item="item" separator=",">
+            (
+            #{item.exam_info_id},
+            #{item.exam_doctor},
+            #{item.dep_id},
+            #{item.exam_result_summary},
+            #{item.suggestion},
+            #{item.center_num},
+            #{item.approver},
+            #{item.approve_date},
+            #{item.creater},
+            #{item.create_time},
+            #{item.updater},
+            #{item.update_time},
+            #{item.Special_setup},
+            #{item.dep_num},
+            #{item.exam_num},
+            #{item.app_type})
+        </foreach>
+    </insert>
 
     <select id="queryExamResultByExamNum" resultType="tphy.peis.entity.dto.DepExamResultDTO">
-        SELECT
-        *
-        FROM
-        (
-        SELECT
-        dd.dep_name ksmc,
-        CASE
+        SELECT *
+        FROM (SELECT dd.dep_name   ksmc,
+                     CASE
 
-        WHEN eci.exam_status = 'D' THEN
-        dd.dep_name+ '(延期)'
-        WHEN eci.exam_status != 'D' THEN
-        dd.dep_name
-        END AS dep_name,
-        e.item_name,
-        e.item_num,
-        e.id AS item_id,
-        ei.id,
-        dd.seq_code,
-        e.seq_code AS e_seq_code,
-        dd.dep_category,
-        '' AS exam_result,
-        '' AS exam_doctor,
-        eci.exam_date
-        FROM
-        customer_info c,
-        exam_info ei,
-        examinfo_charging_item eci,
-        charging_item ci,
-        department_dep dd,
-        charging_item_exam_item cit,
-        examination_item e
-        WHERE
-        ei.exam_num = eci.exam_num
-        AND eci.charging_item_code = ci.item_code
-        AND ci.dep_id = dd.id
-        AND ci.item_code = cit.charging_item_code
-        AND cit.item_code = e.item_num
-        AND eci.pay_status != 'M'
+                         WHEN eci.exam_status = 'D' THEN
+                             dd.dep_name + '(延期)'
+                         WHEN eci.exam_status != 'D' THEN dd.dep_name
+                         END    AS dep_name,
+                     e.item_name,
+                     e.item_num,
+                     e.id       AS item_id,
+                     ei.id,
+                     dd.seq_code,
+                     e.seq_code AS e_seq_code,
+                     dd.dep_category,
+                     ''         AS exam_result,
+                     ''         AS exam_doctor,
+                     eci.exam_date
+              FROM customer_info c,
+                   exam_info ei,
+                   examinfo_charging_item eci,
+                   charging_item ci,
+                   department_dep dd,
+                   charging_item_exam_item cit,
+                   examination_item e
+              WHERE ei.exam_num = eci.exam_num
+                AND eci.charging_item_code = ci.item_code
+                AND ci.dep_id = dd.id
+                AND ci.item_code = cit.charging_item_code
+                AND cit.item_code = e.item_num
+                AND eci.pay_status != 'M'
         AND eci.isActive = 'Y'
         AND eci.exam_status != 'G'
         AND ei.is_Active = 'Y'
@@ -77,338 +96,266 @@
         AND c.id = ei.customer_id
         AND ( c.sex = e.sex OR e.sex = '全部' )
         AND ci.item_category != '耗材类型'
-        AND ei.exam_num = #{examNum} UNION ALL
-        SELECT
-        a.ksmc ksmc,
-        a.dep_name,
-        a.item_name,
-        a.exam_num,
-        a.item_id,
-        a.id,
-        a.seq_code,
-        a.e_seq_code,
-        a.dep_category,
-        e.exam_result_summary AS exam_result,
-        e.exam_doctor,
-        e.update_time
-        FROM
-        (
-        SELECT DISTINCT
-        dd.dep_name ksmc,
-        dd.id AS dep_id,
-        CASE
-
-        WHEN eci.exam_status = 'D' THEN
-        dd.dep_name+ '(延期)'
-        WHEN eci.exam_status != 'D' THEN
-        dd.dep_name
-        END AS dep_name,
-        '科室结论' AS item_name,
-        0 AS item_id,
-        ei.id,
-        dd.seq_code,
-        100000 AS e_seq_code,
-        dd.dep_category,
-        ei.exam_num
-        FROM
-        exam_info ei,
-        examinfo_charging_item eci,
-        charging_item ci,
-        department_dep dd
-        WHERE
-        ei.exam_num = eci.exam_num
-        AND eci.charging_item_code = ci.item_code
-        AND ci.dep_id = dd.id
-        AND eci.pay_status != 'M'
-        AND eci.isActive = 'Y'
-        AND eci.exam_status != 'G'
-        AND ei.is_Active = 'Y'
-        AND dd.dep_category= '17'
-        AND ci.item_category != '耗材类型'
         AND ei.exam_num = #{examNum}
-        ) a
-        LEFT JOIN exam_dep_result e ON a.dep_id = e.dep_id
-        AND a.exam_num = e.exam_num
-        ) a
-        ORDER BY
-          a.seq_code,
-          a.e_seq_code
+              UNION ALL
+              SELECT
+                  a.ksmc ksmc, a.dep_name, a.item_name, a.exam_num, a.item_id, a.id, a.seq_code, a.e_seq_code, a.dep_category, e.exam_result_summary AS exam_result, e.exam_doctor, e.update_time
+              FROM
+                  (
+                  SELECT DISTINCT
+                  dd.dep_name ksmc, dd.id AS dep_id, CASE
+                  WHEN eci.exam_status = 'D' THEN
+                  dd.dep_name+ '(延期)'
+                  WHEN eci.exam_status != 'D' THEN
+                  dd.dep_name
+                  END AS dep_name, '科室结论' AS item_name, 0 AS item_id, ei.id, dd.seq_code, 100000 AS e_seq_code, dd.dep_category, ei.exam_num
+                  FROM
+                  exam_info ei, examinfo_charging_item eci, charging_item ci, department_dep dd
+                  WHERE
+                  ei.exam_num = eci.exam_num
+                  AND eci.charging_item_code = ci.item_code
+                  AND ci.dep_id = dd.id
+                  AND eci.pay_status != 'M'
+                  AND eci.isActive = 'Y'
+                  AND eci.exam_status != 'G'
+                  AND ei.is_Active = 'Y'
+                  AND dd.dep_category= '17'
+                  AND ci.item_category != '耗材类型'
+                  AND ei.exam_num = #{examNum}
+                  ) a
+                  LEFT JOIN exam_dep_result e
+              ON a.dep_id = e.dep_id
+                  AND a.exam_num = e.exam_num) a
+        ORDER BY a.seq_code,
+                 a.e_seq_code
     </select>
     <select id="queryCommonExamDetail" resultType="tphy.peis.entity.dto.CommonExamDetailDTO">
-        SELECT
-            c.id,
-            c.health_level,
-            c.exam_result,
-            c.exam_doctor
-        FROM
-            common_exam_detail c
-        WHERE
-            c.exam_num = #{examNum}
+        SELECT c.id,
+               c.health_level,
+               c.exam_result,
+               c.exam_doctor
+        FROM common_exam_detail c
+        WHERE c.exam_num = #{examNum}
           AND c.item_code = #{itemCode}
     </select>
     <select id="queryCriticalDetail" resultType="tphy.peis.entity.dto.CriticalDTO">
-        SELECT
-            id,
-            data_source
-        FROM
-            exam_Critical_detail
-        WHERE
-            exam_num = #{examNum}
+        SELECT id,
+               data_source
+        FROM exam_Critical_detail
+        WHERE exam_num = #{examNum}
           AND item_code = #{itemCode}
           AND is_active = 'Y'
     </select>
 
     <select id="queryExamResultByExamNumInView" resultType="tphy.peis.entity.dto.DepExamResultDTO">
-        SELECT
-        *
-        FROM
-        (
-        SELECT
-        ksmc,
-        a.dep_name,
-        a.item_name,
-        v.id AS item_id,
-        a.id,
-        a.seq_code,
-        a.dep_category,
-        v.exam_desc AS exam_result,
-        v.exam_doctor,
-        a.exam_date,
-        1 AS code,
-        a.item_seq,
-        pd.pacs_req_code AS req_id
-        FROM
-        (
-        SELECT
-        dd.dep_name ksmc,
-        CASE
-        WHEN eci.exam_status = 'D' THEN
-        ci.item_name+ '(延期)'
-        WHEN eci.exam_status != 'D' THEN
-        ci.item_name
-        END AS dep_name,
-        '检查描述' AS item_name,
-        ci.sam_demo_id AS item_id,
-        ei.id,
-        ei.exam_num,
-        dd.seq_code,
-        dd.dep_category,
-        ci.item_seq,
-        eci.exam_date,
-        eci.charging_item_code
-        FROM
-        exam_info ei,
-        examinfo_charging_item eci,
-        charging_item ci,
-        department_dep dd
-        WHERE
-        ei.exam_num = eci.exam_num
-        AND eci.charging_item_code = ci.item_code
-        AND ci.dep_id = dd.id
-        AND eci.pay_status != 'M'
+        SELECT *
+        FROM (SELECT ksmc,
+                     a.dep_name,
+                     a.item_name,
+                     v.id             AS item_id,
+                     a.id,
+                     a.seq_code,
+                     a.dep_category,
+                     v.exam_desc      AS exam_result,
+                     v.exam_doctor,
+                     a.exam_date,
+                     1                AS code,
+                     a.item_seq,
+                     pd.pacs_req_code AS req_id
+              FROM (SELECT dd.dep_name       ksmc,
+                           CASE
+                               WHEN eci.exam_status = 'D' THEN
+                                   ci.item_name + '(延期)'
+                               WHEN eci.exam_status != 'D' THEN ci.item_name
+                               END        AS dep_name,
+                           '检查描述'     AS item_name,
+                           ci.sam_demo_id AS item_id,
+                           ei.id,
+                           ei.exam_num,
+                           dd.seq_code,
+                           dd.dep_category,
+                           ci.item_seq,
+                           eci.exam_date,
+                           eci.charging_item_code
+                    FROM exam_info ei,
+                         examinfo_charging_item eci,
+                         charging_item ci,
+                         department_dep dd
+                    WHERE ei.exam_num = eci.exam_num
+                      AND eci.charging_item_code = ci.item_code
+                      AND ci.dep_id = dd.id
+                      AND eci.pay_status != 'M'
         AND eci.isActive = 'Y'
         AND eci.exam_status != 'G'
         AND ei.is_Active = 'Y'
         AND dd.dep_category= '21'
         AND ci.item_category != '耗材类型'
-        AND ei.exam_num = #{examNum}
-        ) a
-        LEFT JOIN pacs_detail pd ON pd.examinfo_num= a.exam_num
-        AND pd.chargingItem_num = a.charging_item_code
-        LEFT JOIN view_exam_detail v ON v.pacs_req_code = pd.pacs_req_code UNION ALL
-        SELECT
-        ksmc,
-        a.dep_name,
-        a.item_name,
-        v.id AS item_id,
-        a.id,
-        a.seq_code,
-        a.dep_category,
-        v.exam_result AS exam_result,
-        v.exam_doctor,
-        a.exam_date,
-        2 AS code,
-        a.item_seq,
-        pd.pacs_req_code AS req_id
-        FROM
-        (
-        SELECT
-        dd.dep_name ksmc,
-        CASE
-        WHEN eci.exam_status = 'D' THEN
-        ci.item_name+ '(延期)'
-        WHEN eci.exam_status != 'D' THEN
-        ci.item_name
-        END AS dep_name,
-        '检查结论' AS item_name,
-        ci.sam_demo_id AS item_id,
-        ei.id,
-        ei.exam_num,
-        dd.seq_code,
-        dd.dep_category,
-        ci.item_seq,
-        eci.exam_date,
-        eci.charging_item_code
-        FROM
-        exam_info ei,
-        examinfo_charging_item eci,
-        charging_item ci,
-        department_dep dd
-        WHERE
-        ei.exam_num = eci.exam_num
-        AND eci.charging_item_code = ci.item_code
-        AND ci.dep_id = dd.id
-        AND eci.pay_status != 'M'
+        AND ei.exam_num = #{examNum}) a
+                       LEFT JOIN pacs_detail pd ON pd.examinfo_num = a.exam_num
+                  AND pd.chargingItem_num = a.charging_item_code
+                       LEFT JOIN view_exam_detail v ON v.pacs_req_code = pd.pacs_req_code
+              UNION ALL
+              SELECT ksmc,
+                     a.dep_name,
+                     a.item_name,
+                     v.id             AS item_id,
+                     a.id,
+                     a.seq_code,
+                     a.dep_category,
+                     v.exam_result    AS exam_result,
+                     v.exam_doctor,
+                     a.exam_date,
+                     2                AS code,
+                     a.item_seq,
+                     pd.pacs_req_code AS req_id
+              FROM (SELECT dd.dep_name       ksmc,
+                           CASE
+                               WHEN eci.exam_status = 'D' THEN
+                                   ci.item_name + '(延期)'
+                               WHEN eci.exam_status != 'D' THEN ci.item_name
+                               END        AS dep_name,
+                           '检查结论'     AS item_name,
+                           ci.sam_demo_id AS item_id,
+                           ei.id,
+                           ei.exam_num,
+                           dd.seq_code,
+                           dd.dep_category,
+                           ci.item_seq,
+                           eci.exam_date,
+                           eci.charging_item_code
+                    FROM exam_info ei,
+                         examinfo_charging_item eci,
+                         charging_item ci,
+                         department_dep dd
+                    WHERE ei.exam_num = eci.exam_num
+                      AND eci.charging_item_code = ci.item_code
+                      AND ci.dep_id = dd.id
+                      AND eci.pay_status != 'M'
         AND eci.isActive = 'Y'
         AND eci.exam_status != 'G'
         AND ei.is_Active = 'Y'
         AND dd.dep_category= '21'
         AND ci.item_category != '耗材类型'
-        AND ei.exam_num = #{examNum}
-        ) a
-        LEFT JOIN pacs_detail pd ON pd.examinfo_num= a.exam_num
-        AND pd.chargingItem_num = a.charging_item_code
-        LEFT JOIN view_exam_detail v ON v.pacs_req_code = pd.pacs_req_code UNION ALL
-        SELECT
-        ksmc,
-        a.dep_name,
-        a.item_name,
-        v.id AS item_id,
-        a.id,
-        a.seq_code,
-        a.dep_category,
-        ( CASE WHEN v.id IS NULL THEN NULL ELSE 'image_path' END ) AS exam_result,
-        v.exam_doctor,
-        a.exam_date,
-        3 AS code,
-        a.item_seq,
-        pd.pacs_req_code AS req_id
-        FROM
-        (
-        SELECT
-        dd.dep_name ksmc,
-        CASE
+        AND ei.exam_num = #{examNum}) a
+                       LEFT JOIN pacs_detail pd ON pd.examinfo_num = a.exam_num
+                  AND pd.chargingItem_num = a.charging_item_code
+                       LEFT JOIN view_exam_detail v ON v.pacs_req_code = pd.pacs_req_code
+              UNION ALL
+              SELECT ksmc,
+                     a.dep_name,
+                     a.item_name,
+                     v.id                                                     AS item_id,
+                     a.id,
+                     a.seq_code,
+                     a.dep_category,
+                     (CASE WHEN v.id IS NULL THEN NULL ELSE 'image_path' END) AS exam_result,
+                     v.exam_doctor,
+                     a.exam_date,
+                     3                                                        AS code,
+                     a.item_seq,
+                     pd.pacs_req_code                                         AS req_id
+              FROM (SELECT dd.dep_name       ksmc,
+                           CASE
 
-        WHEN eci.exam_status = 'D' THEN
-        ci.item_name+ '(延期)'
-        WHEN eci.exam_status != 'D' THEN
-        ci.item_name
-        END AS dep_name,
-        '图片' AS item_name,
-        ci.sam_demo_id AS item_id,
-        ei.id,
-        ei.exam_num,
-        dd.seq_code,
-        dd.dep_category,
-        ci.item_seq,
-        eci.exam_date,
-        eci.charging_item_code
-        FROM
-        exam_info ei,
-        examinfo_charging_item eci,
-        charging_item ci,
-        department_dep dd
-        WHERE
-        ei.exam_num = eci.exam_num
-        AND eci.charging_item_code = ci.item_code
-        AND ci.dep_id = dd.id
-        AND eci.pay_status != 'M'
+                               WHEN eci.exam_status = 'D' THEN
+                                   ci.item_name + '(延期)'
+                               WHEN eci.exam_status != 'D' THEN ci.item_name
+                               END        AS dep_name,
+                           '图片'         AS item_name,
+                           ci.sam_demo_id AS item_id,
+                           ei.id,
+                           ei.exam_num,
+                           dd.seq_code,
+                           dd.dep_category,
+                           ci.item_seq,
+                           eci.exam_date,
+                           eci.charging_item_code
+                    FROM exam_info ei,
+                         examinfo_charging_item eci,
+                         charging_item ci,
+                         department_dep dd
+                    WHERE ei.exam_num = eci.exam_num
+                      AND eci.charging_item_code = ci.item_code
+                      AND ci.dep_id = dd.id
+                      AND eci.pay_status != 'M'
         AND eci.isActive = 'Y'
         AND eci.exam_status != 'G'
         AND ei.is_Active = 'Y'
         AND dd.dep_category= '21'
         AND ci.item_category != '耗材类型'
-        AND ei.exam_num = #{examNum}
-        ) a
-        LEFT JOIN pacs_detail pd ON pd.examinfo_num= a.exam_num
-        AND pd.chargingItem_num = a.charging_item_code
-        LEFT JOIN view_exam_detail v ON v.pacs_req_code = pd.pacs_req_code
-        ) a
-        ORDER BY
-        a.seq_code,
-        a.item_seq,
-        a.dep_name,
-        a.code
+        AND ei.exam_num = #{examNum}) a
+                       LEFT JOIN pacs_detail pd ON pd.examinfo_num = a.exam_num
+                  AND pd.chargingItem_num = a.charging_item_code
+                       LEFT JOIN view_exam_detail v ON v.pacs_req_code = pd.pacs_req_code) a
+        ORDER BY a.seq_code,
+                 a.item_seq,
+                 a.dep_name,
+                 a.code
     </select>
     <select id="queryExamResultByExamNumInView1" resultType="tphy.peis.entity.dto.DepExamResultDTO">
-        SELECT
-            *
-        FROM
-            (
-                SELECT
-                    d.dep_name ksmc,
-                    d.dep_name,
-                    '检查描述' AS item_name,
-                    v.exam_desc exam_result,
-                    v.exam_date,
-                    v.exam_doctor,
-                    v.id item_id,
-                    d.seq_code,
-                    1 AS code
-                FROM
-                    view_exam_detail v,
-                    exam_info e,
-                    department_dep d
-                WHERE
-                    v.exam_num = e.exam_num
-                  AND v.dept_num = d.dep_num
-                  AND e.exam_num = #{examNum}
-                  AND d.view_result_type = '1' UNION ALL
-                SELECT
-                    d.dep_name ksmc,
-                    d.dep_name,
-                    '检查结论' AS item_name,
-                    v.exam_result,
-                    v.exam_date,
-                    v.exam_doctor,
-                    v.id item_id,
-                    d.seq_code,
-                    2 AS code
-                FROM
-                    view_exam_detail v,
-                    exam_info e,
-                    department_dep d
-                WHERE
-                    v.exam_num = e.exam_num
-                  AND v.dept_num = d.dep_num
-                  AND e.exam_num = #{examNum}
-                  AND d.view_result_type = '1' UNION ALL
-                SELECT
-                    d.dep_name ksmc,
-                    d.dep_name,
-                    '图片' AS item_name,
-                    'image_path' AS exam_result,
-                    v.exam_date,
-                    v.exam_doctor,
-                    v.id item_id,
-                    d.seq_code,
-                    3 AS code
-                FROM
-                    view_exam_detail v,
-                    exam_info e,
-                    department_dep d
-                WHERE
-                    v.exam_num = e.exam_num
-                  AND v.dept_num = d.dep_num
-                  AND e.exam_num = #{examNum}
-                  AND d.view_result_type = '1'
-            ) a
-        ORDER BY
-            a.seq_code,
-            a.item_id,
-            a.code
+        SELECT *
+        FROM (SELECT d.dep_name    ksmc,
+                     d.dep_name,
+                     '检查描述' AS item_name,
+                     v.exam_desc   exam_result,
+                     v.exam_date,
+                     v.exam_doctor,
+                     v.id          item_id,
+                     d.seq_code,
+                     1          AS code
+              FROM view_exam_detail v,
+                   exam_info e,
+                   department_dep d
+              WHERE v.exam_num = e.exam_num
+                AND v.dept_num = d.dep_num
+                AND e.exam_num = #{examNum}
+                AND d.view_result_type = '1'
+              UNION ALL
+              SELECT d.dep_name    ksmc,
+                     d.dep_name,
+                     '检查结论' AS item_name,
+                     v.exam_result,
+                     v.exam_date,
+                     v.exam_doctor,
+                     v.id          item_id,
+                     d.seq_code,
+                     2          AS code
+              FROM view_exam_detail v,
+                   exam_info e,
+                   department_dep d
+              WHERE v.exam_num = e.exam_num
+                AND v.dept_num = d.dep_num
+                AND e.exam_num = #{examNum}
+                AND d.view_result_type = '1'
+              UNION ALL
+              SELECT d.dep_name      ksmc,
+                     d.dep_name,
+                     '图片'       AS item_name,
+                     'image_path' AS exam_result,
+                     v.exam_date,
+                     v.exam_doctor,
+                     v.id            item_id,
+                     d.seq_code,
+                     3            AS code
+              FROM view_exam_detail v,
+                   exam_info e,
+                   department_dep d
+              WHERE v.exam_num = e.exam_num
+                AND v.dept_num = d.dep_num
+                AND e.exam_num = #{examNum}
+                AND d.view_result_type = '1') a
+        ORDER BY a.seq_code,
+                 a.item_id,
+                 a.code
     </select>
     <select id="queryCriticalDatasourseByPacsReqCode" resultType="tphy.peis.entity.dto.CriticalDTO">
-        SELECT
-            ecd.id  ,
-            ecd.data_source
-        FROM
-            charging_item ci,
-            pacs_summary p,
-            view_exam_detail v,
-            exam_Critical_detail ecd
-        WHERE
-            p.examinfo_sampleId = ci.sam_demo_id
+        SELECT ecd.id,
+               ecd.data_source
+        FROM charging_item ci,
+             pacs_summary p,
+             view_exam_detail v,
+             exam_Critical_detail ecd
+        WHERE p.examinfo_sampleId = ci.sam_demo_id
           AND v.pacs_req_code = p.pacs_req_code
           AND ecd.exam_num = v.exam_num
           AND ecd.charging_item_code = ci.item_code
@@ -417,102 +364,88 @@
           AND ecd.is_active = 'Y'
     </select>
     <select id="queryExamResultByExamNum1" resultType="tphy.peis.entity.dto.DepExamResultDTO">
-        SELECT
-        ksmc,
-        a.exam_num,
-        a.dep_name,
-        a.item_name,
-        a.item_num,
-        a.item_id,
-        a.id,
-        a.dep_category,
-        e.exam_result+ ' (' + ( CASE WHEN e.ref_value IS NULL THEN '' ELSE e.ref_value END ) + '  ' + ( CASE WHEN e.item_unit IS NULL THEN '' ELSE e.item_unit END ) + ')' AS exam_result,
-        e.exam_doctor,
-        a.exam_date,
-        e.ref_indicator AS health_level
-        FROM
-        (
-        SELECT
-        dd.dep_name ksmc,
-        CASE
-        WHEN eci.exam_status = 'D' THEN
-        ci.item_name+ '(延期)'
-        WHEN eci.exam_status != 'D' THEN
-        ci.item_name
-        END AS dep_name,
-        ci.id AS c_id,
-        e.item_name,
-        e.id AS item_id,
-        ei.id,
-        e.item_num,
-        ei.exam_num,
-        e.seq_code,
-        ci.item_seq,
-        dd.dep_category,
-        eci.exam_date,
-        ci.item_code
-        FROM
-        exam_info ei,
-        examinfo_charging_item eci,
-        charging_item ci,
-        department_dep dd,
-        charging_item_exam_item cit,
-        examination_item e
-        WHERE
-        ei.exam_num = eci.exam_num
-        AND eci.charging_item_code = ci.item_code
-        AND ci.dep_id = dd.id
-        AND ci.item_code = cit.charging_item_code
-        AND cit.item_code = e.item_num
-        AND eci.pay_status != 'M'
+        SELECT ksmc,
+               a.exam_num,
+               a.dep_name,
+               a.item_name,
+               a.item_num,
+               a.item_id,
+               a.id,
+               a.dep_category,
+               e.exam_result + ' (' + (CASE WHEN e.ref_value IS NULL THEN '' ELSE e.ref_value END) + '  ' +
+               (CASE WHEN e.item_unit IS NULL THEN '' ELSE e.item_unit END) + ')' AS exam_result,
+               e.exam_doctor,
+               a.exam_date,
+               e.ref_indicator                                                    AS health_level
+        FROM (SELECT dd.dep_name ksmc,
+                     CASE
+                         WHEN eci.exam_status = 'D' THEN
+                             ci.item_name + '(延期)'
+                         WHEN eci.exam_status != 'D' THEN ci.item_name
+                         END AS  dep_name,
+                     ci.id   AS  c_id,
+                     e.item_name,
+                     e.id    AS  item_id,
+                     ei.id,
+                     e.item_num,
+                     ei.exam_num,
+                     e.seq_code,
+                     ci.item_seq,
+                     dd.dep_category,
+                     eci.exam_date,
+                     ci.item_code
+              FROM exam_info ei,
+                   examinfo_charging_item eci,
+                   charging_item ci,
+                   department_dep dd,
+                   charging_item_exam_item cit,
+                   examination_item e
+              WHERE ei.exam_num = eci.exam_num
+                AND eci.charging_item_code = ci.item_code
+                AND ci.dep_id = dd.id
+                AND ci.item_code = cit.charging_item_code
+                AND cit.item_code = e.item_num
+                AND eci.pay_status != 'M'
         AND eci.isActive = 'Y'
         AND eci.exam_status != 'G'
         AND ei.is_Active = 'Y'
         AND dd.dep_category= '131'
         AND ci.item_category != '耗材类型'
-        AND ei.exam_num = #{examNum}
-        ) a
-        LEFT JOIN exam_result_detail e ON e.exam_num = a.exam_num
-        AND e.charging_item_code = a.item_code
-        AND e.item_code = a.item_num
-        ORDER BY
-        a.item_seq,
-        a.seq_code
+        AND ei.exam_num = #{examNum}) a
+                 LEFT JOIN exam_result_detail e ON e.exam_num = a.exam_num
+            AND e.charging_item_code = a.item_code
+            AND e.item_code = a.item_num
+        ORDER BY a.item_seq,
+                 a.seq_code
     </select>
     <select id="queryCriticalDatasourseByItemCode" resultType="tphy.peis.entity.dto.CriticalDTO">
-        SELECT
-            id,
-            data_source
-        FROM
-            exam_Critical_detail
-        WHERE
-            exam_num = #{examNum}
+        SELECT id,
+               data_source
+        FROM exam_Critical_detail
+        WHERE exam_num = #{examNum}
           AND item_code = #{itemCode}
           AND is_active = 'Y'
     </select>
     <select id="queryExaminfoChargingItemDTO" resultType="tphy.peis.entity.dto.ExaminfoChargingItemDTO">
-        SELECT
-        ec.id,
-        e.exam_num,
-        c.id AS charge_item_id,
-        c.item_code,
-        c.item_name,
-        d.dep_name,
-        ec.exam_status,
-        CONVERT ( VARCHAR ( 100 ), ec.final_exam_date, 23 ) AS create_time,
-        c.sam_demo_id AS sample_id,
-        ec.examinfo_id,
-        d.dep_category
-        FROM
-        exam_info e,
-        charging_item c,
-        department_dep d,
-        examinfo_charging_item ec
-        LEFT JOIN user_usr u ON u.id = ec.creater
-        WHERE
-        ec.exam_num = e.exam_num
-        AND ec.charge_item_id = c.id
-        AND c.item_category != '耗材类型'
+        SELECT ec.id,
+               e.exam_num,
+               c.id                                           AS charge_item_id,
+               c.item_code,
+               c.item_name,
+               d.dep_name,
+               ec.exam_status,
+               CONVERT(VARCHAR (100), ec.final_exam_date, 23) AS create_time,
+               c.sam_demo_id                                  AS sample_id,
+               ec.examinfo_id,
+               d.dep_category
+        FROM exam_info e,
+             charging_item c,
+             department_dep d,
+             examinfo_charging_item ec
+                 LEFT JOIN user_usr u ON u.id = ec.creater
+        WHERE ec.exam_num = e.exam_num
+          AND ec.charge_item_id = c.id
+          AND c.item_category != '耗材类型'
         AND c.dep_id = d.id
         AND ec.pay_status != 'M'
         AND ec.exam_status != 'G'
@@ -520,31 +453,24 @@
         AND ec.isActive = 'Y'
         AND ec.change_item != 'C'
         AND ec.center_num = #{centerNum}
-        AND e.is_Active= 'Y'
-        AND e.exam_num = #{examNum}
+          AND e.is_Active= 'Y'
+          AND e.exam_num = #{examNum}
         ORDER BY
-        d.seq_code,
-        c.item_seq
+            d.seq_code,
+            c.item_seq
     </select>
     <select id="querySampleExamDetailDTO" resultType="tphy.peis.entity.dto.SampleExamDetailDTO">
-        SELECT
-            *
-        FROM
-            sample_exam_detail s
-        WHERE
-            s.exam_num = #{examNum}
+        SELECT *
+        FROM sample_exam_detail s
+        WHERE s.exam_num = #{examNum}
           AND s.sample_id = #{sampleId}
     </select>
     <select id="getCenterconfigByKey" resultType="tphy.peis.entity.dto.CenterConfigurationDTO">
-        SELECT
-            *
-        FROM
-            center_configuration
-        WHERE
-            config_key = #{configKey}
+        SELECT *
+        FROM center_configuration
+        WHERE config_key = #{configKey}
           AND is_active = 'Y'
-        ORDER BY
-            center_num DESC
+        ORDER BY center_num DESC
     </select>
 
     <select id="getcustomerTypeList" resultType="tphy.peis.entity.dto.CustomerTypeDTO">
@@ -552,7 +478,7 @@
         from customer_type c,
              exam_info e
         where e.customer_type_id = c.id
-          and e.exam_num =#{examNum}
+          and e.exam_num = #{examNum}
     </select>
 
 </mapper>
