@@ -1,15 +1,18 @@
 package tphy.peis;
 
+import com.tphy.peis.PeisApplication;
+import com.tphy.peis.entity.dto.ExaminfoChargingItemDTO;
+import com.tphy.peis.mapper.pacsReport.SystemUserMapper;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import tphy.peis.entity.dto.*;
-import tphy.peis.mapper.DjdhsMapper;
-import tphy.peis.service.DjdhsService;
+import com.tphy.peis.mapper.peisReport.DjdhsMapper;
+import com.tphy.peis.service.DjdhsService;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-@SpringBootTest
+@SpringBootTest(classes = PeisApplication.class)
 class ApplicationTests {
 
     @Resource
@@ -17,6 +20,9 @@ class ApplicationTests {
 
     @Resource
     DjdhsService djdhsService;
+
+    @Autowired
+    SystemUserMapper systemUserMapper;
     @Test
     void contextLoads() {
 
@@ -50,5 +56,10 @@ class ApplicationTests {
             System.out.println(examinfoChargingItemDTO.toString());
         }
 
+    }
+    @Test
+    void testPacs(){
+        List<String> userPwd = systemUserMapper.queryUserPwdById("wxb");
+        System.out.println(userPwd);
     }
 }
