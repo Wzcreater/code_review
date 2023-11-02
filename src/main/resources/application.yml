@@ -11,6 +11,8 @@ spring:
   pdfbox:
     fontCache:
       enabled: false
+  scheduled:
+    pdfToJpg: 180000
 
 mybatis-plus:
   type-aliases-package: com.tphy.peis.entity
@@ -23,6 +25,8 @@ mybatis-plus:
     map-underscore-to-camel-case: false
 # 日志等级
 logging:
+  file:
+    path: Z:\MyDownload\java\TPHY_UB_PEIS\logs
   level:
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
     com.baomidou.mybatisplus: DEBUG
@@ -31,6 +35,7 @@ logging:
     org.apache.pdfbox: OFF
 server:
   port: 8090
+
 
 custom:
   datasource:

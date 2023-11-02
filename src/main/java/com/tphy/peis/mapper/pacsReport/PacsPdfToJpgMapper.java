@@ -26,7 +26,11 @@ public interface PacsPdfToJpgMapper {
      * @param
      * @return
      */
-    @Select("SELECT top 100 * from GetPacsReportDataForPeis order by pname Desc ")
+    /**
+     * 三十天内的pacs报告回传pdf
+     * @return
+     */
+    @Select("SELECT * FROM GetPacsReportDataForPeis g WHERE CONVERT(DATETIME, g.ApproveDate, 120) >= DATEADD(DAY, -50, GETDATE());")
      List<Map<String,String>> getReportData();
 
 }

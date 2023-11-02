@@ -37,9 +37,15 @@ public interface ViewExamImageMapper {
                                @Param("ReportDoctor")String ReportDoctor,
                                @Param("dateNow")String dateNow,
                                @Param("ReportFinding")String ReportFinding,
-                               @Param("ReportDignosis")String ReportDignosis);
+                               @Param("ReportDignosis")String ReportDignosis,
+                               @Param("updTime")String updTime);
+
+
 
     @Select("SELECT p.summary_id from pacs_detail p WHERE p.examinfo_num =#{examNum} and p.pacs_req_code=#{reqCode}")
     List<String> querySummaryIdByExamNumAndReqCode(@Param("examNum") String examNum, @Param("reqCode") String reqCode);
 
+    String queryUpdTimeByExamNumAndReqCode(@Param("examNum") String examNum, @Param("reqCode") String reqCode);
+
+    Boolean saveUpdTimeAndImgPath(@Param("updTime")String updTime, @Param("pathNow")String pathNow, @Param("examNum")String patientId, @Param("reqCode")String inHospitalNum);
 }

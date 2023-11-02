@@ -1,6 +1,7 @@
 package com.tphy.peis.mapper.peisReport;
 
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -17,6 +18,7 @@ import java.util.Map;
  * @Date 2023-10-16
  * @Version 1.0
  **/
+@Mapper
 public interface SfxpdyMapper {
     /**
      * 根据体检号查询pacs视图返回个人体检项目明细  queryUserPwdById

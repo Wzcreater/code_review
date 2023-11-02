@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tphy.peis.mapper.peisReport.ViewExamImageMapper">
+    <insert id="procReportAutoSave">
+        exec proc_report_auto_save @exam_num=#{patientid},
+        @item_code= #{summaryId} ,
+        @study_type=#{exandevice},@check_doct=#{ReportDoctor},
+        @check_date=#{dateNow},@Diagnose= #{ReportFinding} ,
+        @check_desc=#{ReportDignosis},@error_code='',@pacs_report_update=#{updTime}
+    </insert>
+    <update id="saveUpdTimeAndImgPath">
+        update view_exam_image
+           set image_path = #{pathNow} , pacs_report_update = #{updTime}
+           WHERE exam_num = #{examNum} and pacs_req_code =#{reqCode}
+    </update>
+    <select id="queryUpdTimeByExamNumAndReqCode" resultType="java.lang.String">
+        select pacs_report_update
+          from view_exam_image v
+         WHERE v.exam_num = #{examNum} and v.pacs_req_code = #{reqCode}
+    </select>
+</mapper>
