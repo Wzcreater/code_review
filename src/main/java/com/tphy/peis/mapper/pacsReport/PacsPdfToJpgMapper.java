@@ -6,25 +6,27 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright (C) 2023  北京天鹏恒宇科技发展有限公司 版权所有
  * Copyright (C) 2023  TPHY.Co.,Ltd.  All rights reserved
  *
  * @Author wangzhen
- * @ClassName DjdhsMapper
- * @Description 导检单回收Mapper
+ * @ClassName PacsGetReportMapper
+ * @Description Pacs拿取体检各项信息Mapper
  * @Date 2023-10-16
  * @Version 1.0
  **/
 @Mapper
 @Qualifier("secondaryDataSource")
-public interface SystemUserMapper {
+public interface PacsPdfToJpgMapper {
     /**
-     * 根据用户Id查询密码  queryUserPwdById
-     * @param usersID
+     * 根据所有体检回传数据 getReportData
+     * @param
      * @return
      */
-    @Select("SELECT s.USER_PASSWORD from SYSTEMUSER s WHERE s.users_ID = #{usersID}")
-    List<String> queryUserPwdById(@Param("usersID") String usersID);
+    @Select("SELECT top 100 * from GetPacsReportDataForPeis order by pname Desc ")
+     List<Map<String,String>> getReportData();
+
 }

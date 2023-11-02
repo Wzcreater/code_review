@@ -5,6 +5,12 @@ spring:
     password: Tphy@123.
   sqlserver:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    tls-versions:
+      - TLSv1.2
+      - TLSv1.3
+  pdfbox:
+    fontCache:
+      enabled: false
 
 mybatis-plus:
   type-aliases-package: com.tphy.peis.entity
@@ -21,6 +27,8 @@ logging:
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
     com.baomidou.mybatisplus: DEBUG
     com.dragonsoft.demojar.mapper: DEBUG
+    org.apache.fontbox.ttf.TTFParser: ERROR
+    org.apache.pdfbox: OFF
 server:
   port: 8090
 
@@ -32,11 +40,17 @@ custom:
       username: sa
       password: Tphy@123.
       driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      tls-versions:
+        - TLSv1.2
+        - TLSv1.3
     ds2:
       jdbc-url: jdbc:sqlserver://123.125.12.107:1433;DatabaseName=Uniris
       username: sa
       password: Tphy@123.
       driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      tls-versions:
+        - TLSv1.2
+        - TLSv1.3
 
 
 
