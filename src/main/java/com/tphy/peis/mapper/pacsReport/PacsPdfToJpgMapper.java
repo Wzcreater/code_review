@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.Map;
 @Mapper
 @Qualifier("secondaryDataSource")
 public interface PacsPdfToJpgMapper {
+
     /**
      * 根据所有体检回传数据 getReportData
      * @param
@@ -30,7 +32,7 @@ public interface PacsPdfToJpgMapper {
      * 三十天内的pacs报告回传pdf
      * @return
      */
-    @Select("SELECT * FROM GetPacsReportDataForPeis g WHERE CONVERT(DATETIME, g.ApproveDate, 120) >= DATEADD(DAY, -50, GETDATE());")
-     List<Map<String,String>> getReportData();
+    @Select("SELECT * FROM GetPacsReportDataForPeis g WHERE CONVERT(DATETIME, g.ApproveDate, 120) >= DATEADD(DAY, -#{ddate}, GETDATE());")
+     List<Map<String,String>> getReportData(@Param("ddate") Integer date);
 
 }
