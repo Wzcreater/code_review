@@ -62,5 +62,6 @@ custom:
 spDate:
   time : 50
 
-
+schedule:
+  pdfToJpg : 120000
 

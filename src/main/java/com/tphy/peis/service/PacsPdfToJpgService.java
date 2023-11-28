@@ -27,4 +27,9 @@ public interface PacsPdfToJpgService {
      * @return
      */
      Integer pacsPdfToJpg () throws IOException;
+
+
+
+     void convertPdfInFolder (String folderPath) ;
+     void convertPdfInFolder () ;
 }
