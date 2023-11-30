@@ -31,16 +31,18 @@ public interface ViewExamImageMapper {
      * @param
      * @return
      */
-    Boolean procReportAutoSave(@Param("patientid")String patientid,
-                               @Param("summaryId")String summaryId,
-                               @Param("exandevice")String exandevice,
-                               @Param("ReportDoctor")String ReportDoctor,
-                               @Param("dateNow")String dateNow,
-                               @Param("ReportFinding")String ReportFinding,
-                               @Param("ReportDignosis")String ReportDignosis,
-                               @Param("updTime")String updTime);
+    Boolean procReportAutoSave(@Param("patientid") String patientid,
+                               @Param("summaryId") String summaryId,
+                               @Param("exandevice") String exandevice,
+                               @Param("ReportDoctor") String ReportDoctor,
+                               @Param("dateNow") String dateNow,
+                               @Param("ReportFinding") String ReportFinding,
+                               @Param("ReportDignosis") String ReportDignosis,
+                               @Param("updTime") String updTime,
+                               @Param("fixPath") String fixPath);
 
 
+    Integer insertViewImage(@Param("filePath")String filePath,@Param("examNum")String examNum,@Param("reqCode")String reqCode,@Param("reportDate")String reportDate);
 
     @Select("SELECT p.summary_id from pacs_detail p WHERE p.examinfo_num =#{examNum} and p.pacs_req_code=#{reqCode}")
     List<String> querySummaryIdByExamNumAndReqCode(@Param("examNum") String examNum, @Param("reqCode") String reqCode);

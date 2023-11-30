@@ -101,6 +101,9 @@ public class PacsPdfToJpgServiceImpl implements PacsPdfToJpgService {
                 }
                 document = PDDocument.load(in);
                 PDFRenderer pdfRenderer = new PDFRenderer(document);
+                int pageNum = 0; // 当前要处理的页面号码
+                int totalPage = 0; // PDF文件的总页数
+
 
                 //如果path不为空说明已经插了这个报告回传图片
                 if (!ObjectUtils.isEmpty(paths)) {
@@ -130,23 +133,33 @@ public class PacsPdfToJpgServiceImpl implements PacsPdfToJpgService {
                                 patientDir.mkdirs();
                             }
 
-                            File outputFile = new File(patientDirectory, inHospitalNum + ".jpg");
-                            BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300);
-                            boolean ifWrite = ImageIO.write(bim, "jpg", outputFile);
-                            //如果写入图片到文件夹成功，则修改图片路径
-                            String pathNow = "/pacs_img/" + todayDate + "/" + exandevice + "/" + patientId + "/" + inHospitalNum + ".jpg";
-                            if (ifWrite) {
-                                log.info("修改-插入图片成功：" + pathNow);
-                                Boolean aBoolean = viewExamImageMapper.saveUpdTimeAndImgPath(updTime, pathNow, patientId, inHospitalNum);
-                                if (aBoolean) {
-                                    sum++;
-                                    log.info("修改图片路径成功：" + pathNow);
+
+                            totalPage = document.getNumberOfPages();
+
+                            for (int i = 0; i < totalPage; i++) {
+
+                                File outputFile = new File(patientDirectory, inHospitalNum +"-"+i+ ".jpg");
+                                BufferedImage bim = pdfRenderer.renderImageWithDPI(i, 300); // 渲染当前页面为BufferedImage对象
+                                boolean ifWrite = ImageIO.write(bim, "jpg", outputFile);
+                                //如果写入图片到文件夹成功，则修改图片路径
+                                String pathNow = "/pacs_img/" + todayDate + "/" + exandevice + "/" + patientId + "/" + inHospitalNum +"-"+i+ ".jpg";
+                                if (ifWrite) {
+                                    log.info("修改-插入图片成功：" + pathNow);
+                                    Boolean aBoolean = viewExamImageMapper.saveUpdTimeAndImgPath(updTime, pathNow, patientId, inHospitalNum);
+                                    if (aBoolean) {
+                                        sum++;
+                                        log.info("修改图片路径成功：" + pathNow);
+                                    } else {
+                                        log.info("修改图片路径失败：" + pathNow);
+                                    }
                                 } else {
-                                    log.info("修改图片路径失败：" + pathNow);
+                                    log.info("修改-插入图片失败：" + pathNow);
                                 }
-                            } else {
-                                log.info("修改-插入图片失败：" + pathNow);
+
+
+
                             }
+
                         }
                     }
 
@@ -170,35 +183,71 @@ public class PacsPdfToJpgServiceImpl implements PacsPdfToJpgService {
                     patientDir.mkdirs();
                 }
 
-                File outputFile = new File(patientDirectory, inHospitalNum + ".jpg");
-                log.info("outputFile:{}", outputFile);
-                BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300);
-                boolean ifWrite = ImageIO.write(bim, "jpg", outputFile);
-                log.info("ifWrite:{}", ifWrite);
-                if (ifWrite) {
-                    log.info("保存-插入图片成功：" + outputFile.getPath());
 
-                    String reportDoctor = report.get("ReportDoctor");
-                    String reportFinding = report.get("ReportFinding");
-                    String reportDignosis = report.get("ReportDignosis");
-                    try {
-                        Boolean aBoolean = viewExamImageMapper.procReportAutoSave(patientId, summary.get(0),
-                                exandevice, reportDoctor, todayDate, reportFinding, reportDignosis, updTime);
-                        log.info("aBoolean:{}", aBoolean);
-                        if (aBoolean) {
-                            log.info("保存图片信息成功" + outputFile.getPath());
-                        } else {
-                            log.info("保存图片信息失败" + outputFile.getPath());
+
+                totalPage = document.getNumberOfPages();
+
+
+                for (int i = 0; i < totalPage; i++) {
+
+                    File outputFile = new File(patientDirectory, inHospitalNum + "-"+i+".jpg");
+
+                    String fixPath ="-"+i;
+                    log.info("outputFile:{}", outputFile);
+
+
+                    BufferedImage bim = pdfRenderer.renderImageWithDPI(i, 300); // 渲染当前页面为BufferedImage对象
+                    boolean ifWrite = ImageIO.write(bim, "jpg", outputFile);// 将BufferedImage写入到JPEG文件中
+                    pageNum++; // 更新页面号码，指向下一页
+
+
+                    log.info("ifWrite:{}", ifWrite);
+                    if (ifWrite) {
+                        log.info("保存-插入图片成功：" + outputFile.getPath());
+
+                        String reportDoctor = report.get("ReportDoctor");
+                        String reportFinding = report.get("ReportFinding");
+                        String reportDignosis = report.get("ReportDignosis");
+                        try {
+//                            StringBuilder imgFileBuilder = new StringBuilder();
+//                            imgFileBuilder.append("/pacs_img/");
+//                            imgFileBuilder.append(todayDate);
+//                            imgFileBuilder.append("/");
+//                            imgFileBuilder.append(exandevice);
+//                            imgFileBuilder.append("/");
+//                            imgFileBuilder.append(patientId);
+//                            imgFileBuilder.append("/");
+//                            imgFileBuilder.append(inHospitalNum);
+//                            imgFileBuilder.append("-");
+//                            imgFileBuilder.append(i);
+//                            imgFileBuilder.append(".jpg");
+//                            String img_file = imgFileBuilder.toString();
+
+//                            Integer integer = viewExamImageMapper.insertViewImage(img_file, patientId, inHospitalNum, approveDate);
+                            Boolean aBoolean = viewExamImageMapper.procReportAutoSave(patientId, summary.get(0),
+                                    exandevice, reportDoctor, todayDate, reportFinding, reportDignosis, updTime,fixPath);
+                            log.info("aBoolean:{}", aBoolean);
+                            if (aBoolean) {
+                                log.info("保存图片信息成功" + outputFile.getPath());
+                            } else {
+                                log.info("保存图片信息失败" + outputFile.getPath());
+                            }
+                        } catch (Exception e) {
+                            log.error("保存图片信息失败：{}", e);
                         }
-                    } catch (Exception e) {
-                        log.error("保存图片信息失败：{}", e);
-                    }
 
-                } else {
-                    log.info("保存-插入图片失败：" + outputFile.getPath());
+                    } else {
+                        log.info("保存-插入图片失败：" + outputFile.getPath());
+                    }
+                    sum++;
                 }
-                sum++;
                 document.close();
+
+
+
+//                BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300);
+//                boolean ifWrite = ImageIO.write(bim, "jpg", outputFile);
+
             } catch (Exception e) {
                 log.error("error:{}", e);
                 log.info("体检号：{}，报错", patientId);

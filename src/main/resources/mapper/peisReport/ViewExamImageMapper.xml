@@ -7,7 +7,25 @@
         @item_code= #{summaryId} ,
         @study_type=#{exandevice},@check_doct=#{ReportDoctor},
         @check_date=#{dateNow},@Diagnose= #{ReportFinding} ,
-        @check_desc=#{ReportDignosis},@error_code='',@pacs_report_update=#{updTime}
+        @check_desc=#{ReportDignosis},@error_code='',@pacs_report_update=#{updTime},@fixPath=#{fixPath}
+    </insert>
+
+    <insert id="insertViewImage">
+        INSERT INTO view_exam_image
+        (view_exam_id,
+         image_path,
+         create_time,
+         update_time,
+         exam_num,
+         pacs_req_code,
+         pacs_report_update)
+        VALUES (99,
+                #{filePath},
+                GETDATE(),
+                GETDATE(),
+                #{examNum},
+                #{reqCode},
+                #{reportDate});
     </insert>
     <update id="saveUpdTimeAndImgPath">
         update view_exam_image
