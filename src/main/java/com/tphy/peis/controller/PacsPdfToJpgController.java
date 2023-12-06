@@ -37,7 +37,7 @@ public class PacsPdfToJpgController {
     @Autowired
     PacsPdfToJpgService pacsPdfToJpgService;
 
-//    @Value("${schedule.pdfToJpg}")
+    //    @Value("${schedule.pdfToJpg}")
     @Value("${schedule.pdfToJpg}")
     private long pdfToJpgTime; // 从配置文件中读取调度间隔时间
 
@@ -59,7 +59,15 @@ public class PacsPdfToJpgController {
         return new SuccessResponseData("成功转换"+imgs+"张图片");
     }
 
-
+    @GetMapping("hsinsertJpg")
+    public ResponseData hsinsertJpg() throws IOException {
+        LocalDateTime currentTime = LocalDateTime.now();
+        String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("开始保存pacs回传图片，当前时间：" + formattedTime);
+        Integer imgs = pacsPdfToJpgService.hsinsertJpg();
+        log.info("成功转换"+imgs+"张图片");
+        return new SuccessResponseData("成功转换"+imgs+"张图片");
+    }
 
 
     /*
@@ -69,7 +77,7 @@ public class PacsPdfToJpgController {
      * @Params: []
      * @Return: void
      **/
-    @Scheduled(fixedRateString  = "${schedule.pdfToJpg}")
+    //@Scheduled(fixedRateString  = "${schedule.pdfToJpg}")
     public void convertPdfToJpg() {
         pacsPdfToJpgService.convertPdfInFolder();
     }

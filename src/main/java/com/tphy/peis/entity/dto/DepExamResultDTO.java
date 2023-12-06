@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @ToString
 @Data
 @AllArgsConstructor
@@ -32,7 +34,7 @@ public class DepExamResultDTO {
     private long exam_item_id;
     private String item_code;
     private String item_num = "";
-
+    private String defaultResult;
     private String dep = "";
     private long exam_info_id;
     private String exam_status = "";
@@ -45,8 +47,8 @@ public class DepExamResultDTO {
 
     private long result_type;
     private String occ_item_flag = "N";
-
-    
+    //检查项目结果文字类型
+    private String item_category;
     public void setExam_status(String exam_status) {
         this.exam_status = exam_status;
         if ("N".equals(exam_status)) {

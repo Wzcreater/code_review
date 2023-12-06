@@ -29,12 +29,21 @@
     </insert>
     <update id="saveUpdTimeAndImgPath">
         update view_exam_image
-           set image_path = #{pathNow} , pacs_report_update = #{updTime}
-           WHERE exam_num = #{examNum} and pacs_req_code =#{reqCode}
+        set image_path = #{pathNow} , pacs_report_update = #{updTime}
+        WHERE exam_num = #{examNum} and pacs_req_code =#{reqCode}
     </update>
     <select id="queryUpdTimeByExamNumAndReqCode" resultType="java.lang.String">
         select pacs_report_update
-          from view_exam_image v
-         WHERE v.exam_num = #{examNum} and v.pacs_req_code = #{reqCode}
+        from view_exam_image v
+        WHERE v.exam_num = #{examNum} and v.pacs_req_code = #{reqCode}
     </select>
+    <select id="getHsPacsReportData" resultType="java.util.Map">
+        select *
+        from [10.10.4.200].[Visioncenter].[dbo].[v_pacsreport_url] where   tjh like '92%'
+                                                                     and CONVERT(DATETIME, finaltime, 120) >= DATEADD(DAY, -#{ddate}, GETDATE());
+    </select>
+
+    <!--    <select id="queryHsPacsView">
+
+        </select>-->
 </mapper>

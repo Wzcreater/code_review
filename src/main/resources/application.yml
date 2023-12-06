@@ -1,67 +1,7 @@
 spring:
-  datasource:
-    url: jdbc:sqlserver://123.125.12.107:1433;DatabaseName=peis_qa
-    username: sa
-    password: Tphy@123.
-  sqlserver:
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    tls-versions:
-      - TLSv1.2
-      - TLSv1.3
-  pdfbox:
-    fontCache:
-      enabled: false
-  scheduled:
-    pdfToJpg: 100000000
-
-mybatis-plus:
-  type-aliases-package: com.tphy.peis.entity
-  mapper-locations: /mapper/*.xml
-  configuration:
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
-    cache-enabled: true
-    default-statement-timeout: 30
-    default-fetch-size: 10000
-    map-underscore-to-camel-case: false
-# 日志等级
-logging:
-  file:
-    path: Z:\MyDownload\java\TPHY_UB_PEIS\logs
-  level:
-    org.springframework.jdbc.core.JdbcTemplate: DEBUG
-    com.baomidou.mybatisplus: DEBUG
-    com.dragonsoft.demojar.mapper: DEBUG
-    org.apache.fontbox.ttf.TTFParser: ERROR
-    org.apache.pdfbox: OFF
-server:
-  port: 8090
+  profiles:
+    #    active: dev
+    active: hengshuizhongyi
 
 
-custom:
-  datasource:
-    names: ds1,ds2
-    ds1:
-      jdbc-url: jdbc:sqlserver://123.125.12.107:1433;DatabaseName=peis_qa
-      username: sa
-      password: Tphy@123.
-      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      tls-versions:
-        - TLSv1.2
-        - TLSv1.3
-    ds2:
-      jdbc-url: jdbc:sqlserver://123.125.12.107:1433;DatabaseName=Uniris
-      username: sa
-      password: Tphy@123.
-      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      tls-versions:
-        - TLSv1.2
-        - TLSv1.3
-
-
-
-spDate:
-  time : 50
-
-schedule:
-  pdfToJpg : 120000
 

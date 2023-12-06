@@ -26,10 +26,13 @@ public interface PacsPdfToJpgService {
      * @param
      * @return
      */
-     Integer pacsPdfToJpg () throws IOException;
+    Integer pacsPdfToJpg () throws IOException;
 
 
 
-     void convertPdfInFolder (String folderPath) ;
-     void convertPdfInFolder () ;
+    void convertPdfInFolder (String folderPath) ;
+    void convertPdfInFolder () ;
+
+    Integer hsinsertJpg() throws IOException;
+
 }

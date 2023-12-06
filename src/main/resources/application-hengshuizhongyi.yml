@@ -1,0 +1,66 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://10.10.1.165;DatabaseName=peis
+    username: sa
+    password: Hsszyy@120
+  sqlserver:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    tls-versions:
+      - TLSv1.2
+      - TLSv1.3
+  pdfbox:
+    fontCache:
+      enabled: false
+  scheduled:
+    pdfToJpg: 100000000
+
+mybatis-plus:
+  type-aliases-package: com.tphy.peis.entity
+  mapper-locations: /mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    cache-enabled: true
+    default-statement-timeout: 30
+    default-fetch-size: 10000
+    map-underscore-to-camel-case: false
+# 日志等级
+logging:
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    com.baomidou.mybatisplus: DEBUG
+    com.dragonsoft.demojar.mapper: DEBUG
+    org.apache.fontbox.ttf.TTFParser: ERROR
+    org.apache.pdfbox: OFF
+server:
+  port: 8090
+
+custom:
+  datasource:
+    names: ds1,ds2
+    ds1:
+      jdbc-url: jdbc:sqlserver://10.10.1.165:1433;DatabaseName=peis
+      username: sa
+      password: Hsszyy@120
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      tls-versions:
+        - TLSv1.2
+        - TLSv1.3
+    ds2:
+      jdbc-url: jdbc:sqlserver://10.10.1.165:1433;DatabaseName=Uniris
+      username: sa
+      password: Hsszyy@120
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      tls-versions:
+        - TLSv1.2
+        - TLSv1.3
+
+
+
+spDate:
+  time : 50
+
+schedule:
+  pdfToJpg : 120000
+
+djd:
+  kf: 内科,外科,耳鼻喉科,口腔科,眼科,妇科

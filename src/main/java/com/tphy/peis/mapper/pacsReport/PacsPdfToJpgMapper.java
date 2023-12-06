@@ -33,6 +33,8 @@ public interface PacsPdfToJpgMapper {
      * @return
      */
     @Select("SELECT * FROM GetPacsReportDataForPeis g WHERE CONVERT(DATETIME, g.ApproveDate, 120) >= DATEADD(DAY, -#{ddate}, GETDATE());")
-     List<Map<String,String>> getReportData(@Param("ddate") Integer date);
+    List<Map<String,String>> getReportData(@Param("ddate") Integer date);
+
+
 
 }

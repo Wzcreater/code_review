@@ -32,13 +32,6 @@ public class SfxpdyController {
         System.out.println(params.getExamNum()+params.getItemCodeList());
         try {
             SfxpdyVO sfxpdyVO = service.getInfo(params.getExamNum(),params.getItemCodeList());
-            // 在这里编写你的业务逻辑，使用 examNum 和 itemCodeList 参数
-            // 例如，可以查询数据库或执行其他操作
-            // 这里只是一个示例，你需要根据你的业务逻辑进行编写
-
-            // 假设你有一个方法来获取相关信息
-           // String result = yourService.getInfo(examNum, itemCodeList);
-
             // 返回处理后的数据
             return new SuccessResponseData(sfxpdyVO);
         } catch (Exception e) {

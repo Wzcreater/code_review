@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright (C) 2023  北京天鹏恒宇科技发展有限公司 版权所有
@@ -50,4 +51,6 @@ public interface ViewExamImageMapper {
     String queryUpdTimeByExamNumAndReqCode(@Param("examNum") String examNum, @Param("reqCode") String reqCode);
 
     Boolean saveUpdTimeAndImgPath(@Param("updTime")String updTime, @Param("pathNow")String pathNow, @Param("examNum")String patientId, @Param("reqCode")String inHospitalNum);
+
+    List<Map<String,String>> getHsPacsReportData(@Param("ddate") Integer date);
 }
