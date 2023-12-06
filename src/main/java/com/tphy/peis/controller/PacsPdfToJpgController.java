@@ -41,6 +41,13 @@ public class PacsPdfToJpgController {
     @Value("${schedule.pdfToJpg}")
     private long pdfToJpgTime; // 从配置文件中读取调度间隔时间
 
+    /*
+     * @Description: 拉取pacs报告
+     * @Author: ZCZ
+     * @Date: 2023/12/5 19:19
+     * @Params: []
+     * @Return: com.tphy.peis.conf.reponse.ResponseData
+     **/
     @Scheduled(fixedDelayString = "${spring.scheduled.pdfToJpg}")
     @GetMapping("pdfToJpg")
     public ResponseData pdfToJpg() throws IOException {

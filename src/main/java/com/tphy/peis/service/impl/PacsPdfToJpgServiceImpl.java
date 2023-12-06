@@ -138,11 +138,11 @@ public class PacsPdfToJpgServiceImpl implements PacsPdfToJpgService {
 
                             for (int i = 0; i < totalPage; i++) {
 
-                                File outputFile = new File(patientDirectory, inHospitalNum +"-"+i+ ".jpg");
+                                File outputFile = new File(patientDirectory, inHospitalNum +"_"+i+ ".jpg");
                                 BufferedImage bim = pdfRenderer.renderImageWithDPI(i, 300); // 渲染当前页面为BufferedImage对象
                                 boolean ifWrite = ImageIO.write(bim, "jpg", outputFile);
                                 //如果写入图片到文件夹成功，则修改图片路径
-                                String pathNow = "/pacs_img/" + todayDate + "/" + exandevice + "/" + patientId + "/" + inHospitalNum +"-"+i+ ".jpg";
+                                String pathNow = "/pacs_img/" + todayDate + "/" + exandevice + "/" + patientId + "/" + inHospitalNum +"_"+i+ ".jpg";
                                 if (ifWrite) {
                                     log.info("修改-插入图片成功：" + pathNow);
                                     Boolean aBoolean = viewExamImageMapper.saveUpdTimeAndImgPath(updTime, pathNow, patientId, inHospitalNum);
@@ -190,9 +190,9 @@ public class PacsPdfToJpgServiceImpl implements PacsPdfToJpgService {
 
                 for (int i = 0; i < totalPage; i++) {
 
-                    File outputFile = new File(patientDirectory, inHospitalNum + "-"+i+".jpg");
+                    File outputFile = new File(patientDirectory, inHospitalNum + "_"+i+".jpg");
 
-                    String fixPath ="-"+i;
+                    String fixPath ="_"+i;
                     log.info("outputFile:{}", outputFile);
 
 
