@@ -116,6 +116,7 @@ public interface DjdhsMapper {
     @Update("UPDATE examinfo_charging_item set exam_status ='Y' where exam_num = #{examNum} and charging_item_Code=#{chargingItemCode}")
     void updateExamStatus(@Param("examNum") String examNum, @Param("chargingItemCode") String chargingItemCode);
 
+
     /**
      * 通过体检编号获取患者姓名
      * @param examNum
@@ -123,4 +124,7 @@ public interface DjdhsMapper {
      */
     @Select("select  top 1 b.user_name  from  exam_info a join  customer_info b on a.customer_id = b. id  where a.exam_num = #{examNum }")
     String getNameByExamNum(@Param("examNum") String examNum);
+
+
+    void insertCommonExam(CommonExamDetailDTO commonExamDetailDTO);
 }

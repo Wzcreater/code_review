@@ -12,7 +12,7 @@ spring:
     fontCache:
       enabled: false
   scheduled:
-    pdfToJpg: 180000
+    pdfToJpg: 100000000
 
 mybatis-plus:
   type-aliases-package: com.tphy.peis.entity

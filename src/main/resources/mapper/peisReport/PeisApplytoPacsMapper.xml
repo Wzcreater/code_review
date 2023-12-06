@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tphy.peis.mapper.peisReport.PeisApplyToPacsMapper">
+
+    <select id="getPacsItems" resultType="com.tphy.peis.entity.dto.PacsItemDTO">
+        select
+            a.exam_num,
+            c.user_name as name,
+            c.sex,a.age,
+            '岁' as agetype,
+            c.birthday,
+            c.id_num as identityid,
+            c.address,
+            c.phone as mobile,
+            convert(varchar,a.age) + '岁' as ageHis,
+            a.exam_num as peisNo,
+            '体检' as patientType,
+            '体检科' as ward_no,
+            '' as bedNo,
+            pd.pacs_req_code as applyNo,
+            '' as app_hsp,
+            '体检中心' as appDept,
+            '王青梅' as appPhysician,
+            '功能检查' as modality,
+            b.charging_item_code as itemCode,
+            d.view_num as itemId,
+            d.item_name as itemName,
+            0 as itemPrice,
+            1 as itemCount,
+            getDate() as appDate,
+            convert(varchar(10),GETDATE(),23) as scheduledDate,
+            '院内' as ynwbz
+        from dbo.exam_info a
+                 inner join dbo.examinfo_charging_item b on a.exam_num = b.exam_num
+                 inner join dbo.pacs_detail pd on b.exam_num = pd.examinfo_num and b.charging_item_code = pd.chargingItem_num
+                 inner join dbo.customer_info c on a.customer_id = c.id
+                 inner join dbo.charging_item d on b.charging_item_code = d.item_code
+                 left join examinfo_charging_item_trans t on b.exam_num = t.exam_num and b.charge_item_id = t.charging_item_id
+        where a.is_active = 'Y' and b.isActive = 'Y' and (a.is_after_pay='Y' or b.pay_status in ('Y','R')) and c.is_Active = 'Y' and d.dep_id in (186,208,231,260) and t.exam_num is null and t.charging_item_code is null
+          and a.exam_num = #{examNum};
+    </select>
+    <select id="getChargingItem" resultType="java.util.Map">
+        select a.exam_num,a.charge_item_id,a.charging_item_code
+        from dbo.examinfo_charging_item a
+                 inner join dbo.charging_item b on a.charge_item_id = b.id
+        where a.isActive = 'Y' and a.pay_status in ('Y','R') and a.exam_num = #{examNum} and a.charging_item_code = #{chargingItemCode}
+
+    </select>
+</mapper>

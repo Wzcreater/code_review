@@ -41,7 +41,7 @@ public class PacsPdfToJpgController {
     @Value("${schedule.pdfToJpg}")
     private long pdfToJpgTime; // 从配置文件中读取调度间隔时间
 
-    @Scheduled(fixedDelayString = "${spring.scheduled.pdfToJpg}")
+    //@Scheduled(fixedDelayString = "${spring.scheduled.pdfToJpg}")
     @GetMapping("pdfToJpg")
     public ResponseData pdfToJpg() throws IOException {
         LocalDateTime currentTime = LocalDateTime.now();

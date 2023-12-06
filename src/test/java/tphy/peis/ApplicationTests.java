@@ -2,9 +2,11 @@ package tphy.peis;
 
 import com.tphy.peis.PeisApplication;
 import com.tphy.peis.entity.dto.ExaminfoChargingItemDTO;
+import com.tphy.peis.entity.dto.PacsItemDTO;
 import com.tphy.peis.entity.vo.SfxpdyVO;
 import com.tphy.peis.mapper.pacsReport.PacsPdfToJpgMapper;
 import com.tphy.peis.mapper.pacsReport.SystemUserMapper;
+import com.tphy.peis.mapper.peisReport.PeisApplyToPacsMapper;
 import com.tphy.peis.mapper.peisReport.SfxpdyMapper;
 import com.tphy.peis.mapper.peisReport.ViewExamImageMapper;
 import com.tphy.peis.service.PacsPdfToJpgService;
@@ -28,6 +30,8 @@ class ApplicationTests {
     @Resource
     DjdhsMapper djdhsMapper;
 
+    @Resource
+    PeisApplyToPacsMapper peisApplyToPacsMapper;
     @Resource
     DjdhsService djdhsService;
 
@@ -130,7 +134,16 @@ class ApplicationTests {
             }
         }
         System.out.println(maps1.size());*/
+    }
+    @Test
+    void peisToPACS(){
+       /* List<PacsItemDTO> pacsItems = peisApplyToPacsMapper.getPacsItems("92309120001");
+        for (PacsItemDTO pacsItem : pacsItems) {
+            System.out.println(pacsItem.toString());
+        }*/
+        boolean b = peisApplyToPacsMapper.insertExamItemTrans("92309120001", "123", "123");
+        System.out.println(b);
 
-
+        peisApplyToPacsMapper.deleteExamItemTrans("{0}","{1}");
     }
 }

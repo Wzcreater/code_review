@@ -44,6 +44,7 @@ public class DjdhsController {
         return new SuccessResponseData(depExamResultDTOS);
     }
 
+
     /**
      * 检查细项
      */
@@ -149,7 +150,6 @@ public class DjdhsController {
         djdhsService.insertCommonExamDetail(commonExamDetailDTOList);
         return "保存成功";
     }
-
     /*
      * @Description: 通过体检编号获取患者姓名
      * @Author: ZCZ
