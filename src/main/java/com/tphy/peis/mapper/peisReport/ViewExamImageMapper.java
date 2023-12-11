@@ -52,5 +52,5 @@ public interface ViewExamImageMapper {
 
     Boolean saveUpdTimeAndImgPath(@Param("updTime")String updTime, @Param("pathNow")String pathNow, @Param("examNum")String patientId, @Param("reqCode")String inHospitalNum);
 
-    List<Map<String,String>> getHsPacsReportData(@Param("ddate") Integer date);
+    List<Map<String,Object>> getHsPacsReportData(@Param("ddate") Integer date);
 }
