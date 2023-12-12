@@ -1,7 +1,9 @@
 package com.tphy.peis.controller;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import com.tphy.peis.conf.reponse.ResponseData;
 import com.tphy.peis.conf.reponse.SuccessResponseData;
@@ -15,6 +17,7 @@ import com.tphy.peis.util.StringUtil;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright (C) 2023  北京天鹏恒宇科技发展有限公司 版权所有
@@ -33,7 +36,8 @@ public class DjdhsController {
     private DjdhsMapper djdhsMapper;
     @Resource
     private DjdhsService djdhsService;
-
+    @Value("${djd.kf}")
+    public String hooks;
     /**
      * 批量手动录入
      */
@@ -60,7 +64,7 @@ public class DjdhsController {
      */
     @GetMapping("getWjxm")
     public ResponseData getWjxm(String examNum) {
-
+        String[] kfkss = this.hooks.split(",");
         List<ExaminfoChargingItemDTO> list = djdhsService.queryWjxmExamInfo(examNum, "20201100037001");
 //结束回收页面未检收费项目列表，配置默认排在前边的收费项目.配置收费项目ID，以 , 隔开
         String examEndItemSeq = djdhsService.getCenterconfigByKey("EXAM_END_ITEM_SEQ", "20201100037001").getConfig_value();
@@ -86,7 +90,14 @@ public class DjdhsController {
 
         for (ExaminfoChargingItemDTO examinfoChargingItemDTO : temp) {
             for (DepExamResultDTO depExamResultDTO : jcxx) {
-                if (examinfoChargingItemDTO.getItem_name().equals(depExamResultDTO.getKsmc())&&(examinfoChargingItemDTO.getItem_name().equals("内科")||examinfoChargingItemDTO.getItem_name().equals("外科"))) {
+                Boolean flag = false;
+                for(int i = 0; i < kfkss.length; ++i) {
+                    if (examinfoChargingItemDTO.getDep_name().equals(kfkss[i])) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (examinfoChargingItemDTO.getItem_name().equals(depExamResultDTO.getKsmc())&&(flag)) {
                     if (wjxm.isEmpty()) {
                         wjxm.add(examinfoChargingItemDTO);
                         break;
@@ -134,7 +145,19 @@ public class DjdhsController {
 
         for (DepExamResultDTO depExamResultDTO : jcxx) {
             for (ExaminfoChargingItemDTO examinfoChargingItemDTO : temp) {
+                String itemNum = depExamResultDTO.getItem_num();
+
+                Map<String, String> defaultResult = this.djdhsMapper.getDefaultResult(itemNum);
+
                 if (depExamResultDTO.getKsmc().equals(examinfoChargingItemDTO.getDep_name())) {
+                    if (!ObjectUtil.isEmpty(defaultResult)) {
+                        if (ObjectUtil.isEmpty(depExamResultDTO.getExam_result())) {
+                            depExamResultDTO.setExam_result(defaultResult.get("exam_result"));
+                        }
+
+                        depExamResultDTO.setDefaultResult(defaultResult.get("exam_result"));
+                        depExamResultDTO.setItem_category(defaultResult.get("item_category"));
+                    }
                     wjxx.add(depExamResultDTO);
                     break;
                 }
@@ -161,5 +184,11 @@ public class DjdhsController {
     public String getNameByExamNum(String examNum) {
         String name = djdhsService.getNameByExamNum(examNum);
         return name;
+    }
+
+    @GetMapping("getDoctors")
+    public ResponseData getDoctors(@RequestParam("dep_name") String dep_name) throws JsonProcessingException {
+        List<Map<String, String>> depDoctors = this.djdhsMapper.getDepDoctors(dep_name);
+        return new SuccessResponseData(depDoctors);
     }
 }

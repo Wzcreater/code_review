@@ -159,7 +159,8 @@ public class DjdhsServiceImpl implements DjdhsService {
         List<CommonExamDetailDTO> list2 = departmentConclusionList.stream()
                 .filter(item -> "专家建议".equals(item.getItem_name()))
                 .collect(Collectors.toList());
-
+        String doc_name;
+        String exam_doctor_id;
         for (int i = 0; i < list1.size(); i++) {
             CommonExamDetailDTO item1 = list1.get(i);
             CommonExamDetailDTO item2 = list2.get(i);
@@ -175,7 +176,12 @@ public class DjdhsServiceImpl implements DjdhsService {
                 ExamdepResult examdepResult = new ExamdepResult();
                 String examInfoId = djdhsMapper.getExamInfoId(item1.getExam_num());
                 examdepResult.setExam_info_id(Long.parseLong(examInfoId));
-                examdepResult.setExam_doctor("管理员");
+                doc_name = item1.getExam_doctor();
+                if (!doc_name.equals("管理员")) {
+                    exam_doctor_id = item1.getExam_doctor();
+                    doc_name = this.djdhsMapper.getDocNameById(exam_doctor_id);
+                }
+                examdepResult.setExam_doctor(doc_name);
                 Map deptNum = djdhsMapper.getDeptNum(item1.getDep_name());
                 examdepResult.setDep_id(deptNum.get("id").toString());
                 examdepResult.setDep_num(deptNum.get("dep_num").toString());
@@ -204,7 +210,12 @@ public class DjdhsServiceImpl implements DjdhsService {
             Map chargingItemCode = djdhsMapper.getChargingItemCode(commonExamDetailDTO.getDep_name());
             commonExamDetailDTO.setCharging_item_id(chargingItemCode.get("id").toString());
             commonExamDetailDTO.setCharging_item_code(chargingItemCode.get("item_code").toString());
-            commonExamDetailDTO.setExam_doctor("管理员");
+            doc_name = commonExamDetailDTO.getExam_doctor();
+            if (!doc_name.equals("管理员")) {
+                exam_doctor_id = commonExamDetailDTO.getExam_doctor();
+                doc_name = this.djdhsMapper.getDocNameById(exam_doctor_id);
+            }
+            commonExamDetailDTO.setExam_doctor(doc_name);
             commonExamDetailDTO.setCenter_num("20201100037001");
             commonExamDetailDTO.setHealth_level("Z");
             commonExamDetailDTO.setExam_result_back(commonExamDetailDTO.getExam_result());

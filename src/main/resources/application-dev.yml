@@ -58,7 +58,8 @@ custom:
         - TLSv1.2
         - TLSv1.3
 
-
+djd:
+  kf: 内科,外科,耳鼻喉科,口腔科,眼科,妇科
 
 spDate:
   time : 50

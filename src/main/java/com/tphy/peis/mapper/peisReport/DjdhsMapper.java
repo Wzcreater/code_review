@@ -125,6 +125,18 @@ public interface DjdhsMapper {
     @Select("select  top 1 b.user_name  from  exam_info a join  customer_info b on a.customer_id = b. id  where a.exam_num = #{examNum }")
     String getNameByExamNum(@Param("examNum") String examNum);
 
+    /**
+     * 获取项目小项默认值
+     * @param item_num
+     * @return
+     */
+    @Select({"select exam_result,item_category from examination_item ei LEFT JOIN item_result_lib irb on ei.default_value = irb.id WHERE item_num =#{item_num}"})
+    Map<String, String> getDefaultResult(@Param("item_num") String item_num);
 
-    void insertCommonExam(CommonExamDetailDTO commonExamDetailDTO);
+
+    @Select({"    select distinct  CAST(u.id AS VARCHAR) AS id,u.chi_name from user_usr u,exam_user e where u.id = e.user_id and u.is_active = 'Y' and e.center_num='20201100037001' and u.id in (select d.user_id from dep_user d where d.dep_id = (SELECT top 1 id from            department_dep WHERE dep_name = #{dep_name}    )) order by u.chi_name"})
+    List<Map<String, String>> getDepDoctors(@Param("dep_name") String dep_name);
+
+    @Select({"select chi_name from user_usr where id = #{id}"})
+    String getDocNameById(@Param("id") String id);
 }
