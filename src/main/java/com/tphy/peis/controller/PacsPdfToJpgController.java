@@ -37,10 +37,6 @@ public class PacsPdfToJpgController {
     @Autowired
     PacsPdfToJpgService pacsPdfToJpgService;
 
-    //    @Value("${schedule.pdfToJpg}")
-    @Value("${schedule.pdfToJpg}")
-    private long pdfToJpgTime; // 从配置文件中读取调度间隔时间
-
     /*
      * @Description: 拉取pacs报告
      * @Author: ZCZ
@@ -48,7 +44,7 @@ public class PacsPdfToJpgController {
      * @Params: []
      * @Return: com.tphy.peis.conf.reponse.ResponseData
      **/
-    @Scheduled(fixedDelayString = "${spring.scheduled.pdfToJpg}")
+    //@Scheduled(fixedDelayString = "${spring.scheduled.pdfToJpg}")
     @GetMapping("pdfToJpg")
     public ResponseData pdfToJpg() throws IOException {
         LocalDateTime currentTime = LocalDateTime.now();
@@ -58,7 +54,7 @@ public class PacsPdfToJpgController {
         log.info("成功转换"+imgs+"张图片");
         return new SuccessResponseData("成功转换"+imgs+"张图片");
     }
-
+    @Scheduled(fixedDelayString = "${spring.scheduled.insertJpg}")
     @GetMapping("hsinsertJpg")
     public ResponseData hsinsertJpg() throws IOException {
         LocalDateTime currentTime = LocalDateTime.now();
