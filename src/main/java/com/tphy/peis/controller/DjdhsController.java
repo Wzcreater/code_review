@@ -97,7 +97,7 @@ public class DjdhsController {
                         break;
                     }
                 }
-                if (examinfoChargingItemDTO.getItem_name().equals(depExamResultDTO.getKsmc())&&(flag)) {
+                if (examinfoChargingItemDTO.getDep_name().equals(depExamResultDTO.getKsmc())&&(flag)) {
                     if (wjxm.isEmpty()) {
                         wjxm.add(examinfoChargingItemDTO);
                         break;
