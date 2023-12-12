@@ -1,5 +1,6 @@
 package tphy.peis;
 
+import cn.hutool.core.date.DateTime;
 import com.tphy.peis.PeisApplication;
 import com.tphy.peis.entity.dto.ExaminfoChargingItemDTO;
 import com.tphy.peis.entity.dto.PacsItemDTO;
@@ -11,6 +12,7 @@ import com.tphy.peis.mapper.peisReport.SfxpdyMapper;
 import com.tphy.peis.mapper.peisReport.ViewExamImageMapper;
 import com.tphy.peis.service.PacsPdfToJpgService;
 import com.tphy.peis.service.SfxpdyService;
+import com.tphy.peis.service.impl.PacsPdfToJpgServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,10 +21,9 @@ import com.tphy.peis.service.DjdhsService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @SpringBootTest(classes = PeisApplication.class)
 class ApplicationTests {
@@ -140,10 +141,41 @@ class ApplicationTests {
        /* List<PacsItemDTO> pacsItems = peisApplyToPacsMapper.getPacsItems("92309120001");
         for (PacsItemDTO pacsItem : pacsItems) {
             System.out.println(pacsItem.toString());
-        }*/
+        }*//*
         boolean b = peisApplyToPacsMapper.insertExamItemTrans("92309120001", "123", "123");
         System.out.println(b);
 
-        peisApplyToPacsMapper.deleteExamItemTrans("{0}","{1}");
+        peisApplyToPacsMapper.deleteExamItemTrans("{0}","{1}");*/
+
+        List<Map<String, Object>> hsPacsReportData = viewExamImageMapper.getHsPacsReportData(50);
+        for (Map<String, Object> report : hsPacsReportData) {
+
+            String exandevice = (String) report.get("modality");
+            String patientId = (String) report.get("tjh");
+            String inHospitalNum = (String) report.get("pacsreqcode");
+            Date updatetime1 = (Date) report.get("updatetime");
+            Date approveDate1 = (Date)report.get("finaltime");
+            String pdfPath = (String) report.get("pdfurl");
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String updatetime = simpleDateFormat.format(updatetime1);
+            String approveDate = simpleDateFormat.format(approveDate1);
+
+            System.out.println(exandevice);
+            System.out.println(patientId);
+            System.out.println(inHospitalNum);
+            System.out.println(updatetime);
+            System.out.println(approveDate);
+            System.out.println(pdfPath);
+        }
+    }
+
+    @Test
+    void peisurl() throws IOException {
+       // PacsPdfToJpgServiceImpl.downloadImage("http://img.zcool.cn/community/01ab1f554496aa0000019ae9a878ba.jpg@1280w_1l_2o_100sh.jpg","C:\\Users\\10413\\Desktop\\文档\\测试1.png");
+        String a = "111111111";
+        String[] split = a.split(";");
+        System.out.println(split.length);
+        System.out.println(split[0]);
     }
 }
