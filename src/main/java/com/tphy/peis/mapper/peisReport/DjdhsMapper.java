@@ -130,7 +130,7 @@ public interface DjdhsMapper {
      * @param item_num
      * @return
      */
-    @Select({"select exam_result,item_category from examination_item ei LEFT JOIN item_result_lib irb on ei.default_value = irb.id WHERE item_num =#{item_num}"})
+    @Select({"select exam_result,item_category from examination_item ei LEFT JOIN item_result_lib irb on ei.default_value = irb.id WHERE item_num =#{item_num} and isActive ='Y'"})
     Map<String, String> getDefaultResult(@Param("item_num") String item_num);
 
 
