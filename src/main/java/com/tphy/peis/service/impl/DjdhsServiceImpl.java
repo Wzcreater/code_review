@@ -207,7 +207,17 @@ public class DjdhsServiceImpl implements DjdhsService {
             Map itemCodeByName = djdhsMapper.getItemCodeByName(commonExamDetailDTO.getItem_name());
             commonExamDetailDTO.setItem_code(itemCodeByName.get("item_num").toString());
             commonExamDetailDTO.setExam_item_id(itemCodeByName.get("id").toString());
-            Map chargingItemCode = djdhsMapper.getChargingItemCode(commonExamDetailDTO.getDep_name());
+            String dep_name =commonExamDetailDTO.getDep_name();
+            if(dep_name.equals("眼科")){
+                dep_name = "眼科检查";
+            }
+            if(dep_name.equals("妇科")){
+                dep_name = "妇科检查";
+            }
+            if(dep_name.equals("口腔科")){
+                dep_name.equals("口腔检查");
+            }
+            Map chargingItemCode = djdhsMapper.getChargingItemCode(dep_name);
             commonExamDetailDTO.setCharging_item_id(chargingItemCode.get("id").toString());
             commonExamDetailDTO.setCharging_item_code(chargingItemCode.get("item_code").toString());
             doc_name = commonExamDetailDTO.getExam_doctor();
