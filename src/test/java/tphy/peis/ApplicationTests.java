@@ -7,16 +7,13 @@ import com.tphy.peis.entity.dto.PacsItemDTO;
 import com.tphy.peis.entity.vo.SfxpdyVO;
 import com.tphy.peis.mapper.pacsReport.PacsPdfToJpgMapper;
 import com.tphy.peis.mapper.pacsReport.SystemUserMapper;
-import com.tphy.peis.mapper.peisReport.PeisApplyToPacsMapper;
-import com.tphy.peis.mapper.peisReport.SfxpdyMapper;
-import com.tphy.peis.mapper.peisReport.ViewExamImageMapper;
+import com.tphy.peis.mapper.peisReport.*;
 import com.tphy.peis.service.PacsPdfToJpgService;
 import com.tphy.peis.service.SfxpdyService;
 import com.tphy.peis.service.impl.PacsPdfToJpgServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.tphy.peis.mapper.peisReport.DjdhsMapper;
 import com.tphy.peis.service.DjdhsService;
 
 import javax.annotation.Resource;
@@ -48,6 +45,8 @@ class ApplicationTests {
     SfxpdyService sfxpdyService;
     @Autowired
     SfxpdyMapper sfxpdyMapper;
+    @Autowired
+    MedicalHistoryMapper medicalHistoryMapper;
     @Test
     void contextLoads() {
 
@@ -177,5 +176,12 @@ class ApplicationTests {
         String[] split = a.split(";");
         System.out.println(split.length);
         System.out.println(split[0]);
+    }
+
+    @Test
+    void medicalHistory() throws IOException {
+        Integer integer = medicalHistoryMapper.selectCount(null);
+        System.out.println(integer);
+
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tphy.peis.mapper.peisReport.MedicalHistoryMapper">
+
+
+    <select id="queryMedicalHistoryDetail" resultType="java.util.Map">
+        SELECT
+            mi.item_name,
+            mi.item_queue_number,
+            hid.item_detail_name,
+            hid.input_type,
+            hid.detail_queue_number,
+            hid.item_detail_group_describe,
+            '' as ischecked,
+            hid.item_id,
+            hid.id as item_details_id,
+            '' as result
+        FROM
+            medical_history_major_items mi
+                LEFT JOIN medical_history_item_details hid ON mi.id = hid.item_id
+        WHERE
+            mi.is_Active = 'Y'
+          AND hid.is_active = 'Y'
+        ORDER BY
+            mi.item_queue_number ASC,
+            hid.detail_queue_number ASC;
+
+    </select>
+
+</mapper>
