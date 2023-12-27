@@ -1,4 +1,21 @@
 spring:
+  datasource:
+    dynamic:
+      primary: ds1
+      datasource:
+        ds1:
+          url: jdbc:sqlserver://123.125.12.107:1433;DatabaseName=peis_qa
+          type: com.alibaba.druid.pool.DruidDataSource #使用druid数据源
+          username: sa
+          password: Tphy@123.
+          driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        ds2:
+          url: jdbc:sqlserver://123.125.12.107:1433;DatabaseName=Uniris
+          username: sa
+          password: Tphy@123.
+          driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+          type: com.alibaba.druid.pool.DruidDataSource #使用druid数据源
+
   pdfbox:
     fontCache:
       enabled: false
@@ -26,27 +43,6 @@ logging:
     org.apache.pdfbox: OFF
 server:
   port: 8090
-
-
-custom:
-  datasource:
-    names: ds1,ds2
-    ds1:
-      jdbc-url: jdbc:sqlserver://123.125.12.107:1433;DatabaseName=peis_qa
-      username: sa
-      password: Tphy@123.
-      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      tls-versions:
-        - TLSv1.2
-        - TLSv1.3
-    ds2:
-      jdbc-url: jdbc:sqlserver://123.125.12.107:1433;DatabaseName=Uniris
-      username: sa
-      password: Tphy@123.
-      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      tls-versions:
-        - TLSv1.2
-        - TLSv1.3
 
 djd:
   kf: 内科,外科,耳鼻喉科,口腔科,眼科,妇科

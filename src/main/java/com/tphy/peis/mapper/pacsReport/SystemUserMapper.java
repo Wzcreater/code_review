@@ -1,5 +1,6 @@
 package com.tphy.peis.mapper.pacsReport;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -18,7 +19,7 @@ import java.util.List;
  * @Version 1.0
  **/
 @Mapper
-@Qualifier("secondaryDataSource")
+@DS("ds2")
 public interface SystemUserMapper {
     /**
      * 根据用户Id查询密码  queryUserPwdById

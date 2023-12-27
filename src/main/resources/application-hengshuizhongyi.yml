@@ -1,10 +1,27 @@
 spring:
+  datasource:
+    dynamic:
+      primary: ds1
+      datasource:
+        ds1:
+          url: jdbc:sqlserver://10.10.1.165:1433;DatabaseName=peis
+          type: com.alibaba.druid.pool.DruidDataSource #使用druid数据源
+          username: sa
+          password: Tphy@123.
+          driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        ds2:
+          url: jdbc:sqlserver://10.10.1.165:1433;DatabaseName=Uniris
+          username: sa
+          password: Tphy@123.
+          driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+          type: com.alibaba.druid.pool.DruidDataSource #使用druid数据源
+
   pdfbox:
     fontCache:
       enabled: false
   scheduled:
     pdfToJpg: 100000000
-    insertJpg: 300000
+
 mybatis-plus:
   type-aliases-package: com.tphy.peis.entity
   mapper-locations: /mapper/*.xml
@@ -16,6 +33,8 @@ mybatis-plus:
     map-underscore-to-camel-case: false
 # 日志等级
 logging:
+  file:
+    path: Z:\MyDownload\java\TPHY_UB_PEIS\logs
   level:
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
     com.baomidou.mybatisplus: DEBUG
@@ -25,33 +44,11 @@ logging:
 server:
   port: 8090
 
-custom:
-  datasource:
-    names: ds1,ds2
-    ds1:
-      jdbc-url: jdbc:sqlserver://10.10.1.165:1433;DatabaseName=peis
-      username: sa
-      password: Hsszyy@120
-      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      tls-versions:
-        - TLSv1.2
-        - TLSv1.3
-    ds2:
-      jdbc-url: jdbc:sqlserver://10.10.1.165:1433;DatabaseName=Uniris
-      username: sa
-      password: Hsszyy@120
-      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      tls-versions:
-        - TLSv1.2
-        - TLSv1.3
-
-
+djd:
+  kf: 内科,外科,耳鼻喉科,口腔科,眼科,妇科
 
 spDate:
   time : 50
 
 schedule:
   pdfToJpg : 120000
-
-djd:
-  kf: 内科,外科,耳鼻喉科,口腔科,眼科,妇科

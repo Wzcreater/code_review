@@ -75,11 +75,20 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.10</version>
         </dependency>
-        <!-- mybatis-plus插件依赖 -->
+
+        <!--mybatis依赖-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.1.1</version>
+            <version>3.1.0</version>
+        </dependency>
+
+        <!--数据库相关-->
+        <!--多数据源配置-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+            <version>3.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>

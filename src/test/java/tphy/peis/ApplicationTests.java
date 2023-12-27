@@ -87,7 +87,8 @@ class ApplicationTests {
     void testPacs() throws IOException {
         /*List<String> userPwd = systemUserMapper.queryUserPwdById("wxb");
         System.out.println(userPwd);*/
-
+        List<Map<String, String>> reportData = pacsPdfToJpgMapper.getReportData(30);
+        System.out.println(reportData);
         /*List<Map<String, String>> reportDatas = pacsPdfToJpgMapper.getReportData();
         for (Map<String, String> reportData : reportDatas) {
             String f_pdf_path = reportData.get("f_pdf_path");
@@ -121,12 +122,12 @@ class ApplicationTests {
                 System.out.println(entry.getKey()+entry.getValue().toString());
             }
         }*/
-        List<String> items = new ArrayList<>();
+        /*List<String> items = new ArrayList<>();
         items.add("C0002464");
         items.add("C0002474");
         items.add("C0002484");
         SfxpdyVO info = sfxpdyService.getInfo("92310300001", items);
-        System.out.println(info.toString());
+        System.out.println(info.toString());*/
         /*List<Map<String, Object>> maps1 = sfxpdyMapper.queryPacsPInfoByExamNum("92310300001");
         for (Map<String, Object> map : maps1) {
             Set<Map.Entry<String, Object>> entries = map.entrySet();
@@ -181,9 +182,9 @@ class ApplicationTests {
 
     @Test
     void medicalHistory() throws IOException {
-       /* Integer integer = medicalHistoryMapper.selectCount(null);
-        System.out.println(integer);*/
-        List<MedicalHistoryItemDetailsResult> detailsResult = medicalHistoryMapper.getDetailsResult("0000000");
-        System.out.println(detailsResult);
+        Integer integer = medicalHistoryMapper.selectCount(null);
+        System.out.println(integer);
+/*        List<MedicalHistoryItemDetailsResult> detailsResult = medicalHistoryMapper.getDetailsResult("0000000");
+        System.out.println(detailsResult);*/
     }
 }

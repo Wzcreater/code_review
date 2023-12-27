@@ -1,8 +1,8 @@
 spring:
   profiles:
-    #active: dev
+    active: dev
     #active: hengshuizhongyi
-    active: lxrmyy
+    #active: lxrmyy
 
 
 
