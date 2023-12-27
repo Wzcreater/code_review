@@ -181,9 +181,9 @@ public class DjdhsController {
      * @Return: java.lang.String
      **/
     @GetMapping("getNameByExamNum")
-    public String getNameByExamNum(String examNum) {
-        String name = djdhsService.getNameByExamNum(examNum);
-        return name;
+    public ResponseData getNameByExamNum(String examNum) {
+        List<Map<String,Object>> name = djdhsService.getNameByExamNum(examNum);
+        return new SuccessResponseData(name);
     }
 
     @GetMapping("getDoctors")

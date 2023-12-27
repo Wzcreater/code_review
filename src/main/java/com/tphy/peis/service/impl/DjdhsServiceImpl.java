@@ -261,7 +261,7 @@ public class DjdhsServiceImpl implements DjdhsService {
      * @Return: java.lang.String
      **/
     @Override
-    public String getNameByExamNum(String examNum) {
+    public List<Map<String,Object>> getNameByExamNum(String examNum) {
         return djdhsMapper.getNameByExamNum(examNum);
     }
 }

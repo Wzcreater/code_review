@@ -44,6 +44,6 @@ public interface MedicalHistoryMapper extends BaseMapper<MedicalHistoryItemDetai
     @Update("UPDATE [dbo].[medical_history_item_details_result] SET [item_details_sum] = #{item_details_sum}, [item_details_text] = #{item_details_text}, [item_details_id] = #{item_details_id}, [exam_num] = #{exam_num}, [item_id] = #{item_id} WHERE [id] = #{id};")
     Integer updateResult(MedicalHistoryItemDetailsResult medicalHistoryItemDetailsResults);
 
-    @Select("SELECT * from medical_history_item_details_result where exam_num = #{exam_num} and (item_details_sum in('1') or item_details_text is not null)")
+    @Select("SELECT * from medical_history_item_details_result where exam_num = #{exam_num}")
     List<MedicalHistoryItemDetailsResult> getDetailsResult(@Param("exam_num") String exam_num);
 }

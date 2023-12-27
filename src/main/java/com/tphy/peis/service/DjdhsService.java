@@ -6,6 +6,7 @@ import com.tphy.peis.entity.dto.CenterConfigurationDTO;
 import com.tphy.peis.entity.dto.DepExamResultDTO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Copyright (C) 2023  北京天鹏恒宇科技发展有限公司 版权所有
@@ -29,6 +30,6 @@ public interface DjdhsService {
 
     void insertCommonExamDetail(List<CommonExamDetailDTO> commonExamDetailDTOList);
 
-    String getNameByExamNum(String examNum);
+    List<Map<String,Object>> getNameByExamNum(String examNum);
 
 }

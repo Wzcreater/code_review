@@ -29,17 +29,17 @@ custom:
   datasource:
     names: ds1,ds2
     ds1:
-      jdbc-url: jdbc:sqlserver://10.10.1.165:1433;DatabaseName=peis
+      jdbc-url: jdbc:sqlserver://192.168.0.73:1433;DatabaseName=peis
       username: sa
-      password: Hsszyy@120
+      password: Tphy@1234
       driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
       tls-versions:
         - TLSv1.2
         - TLSv1.3
     ds2:
-      jdbc-url: jdbc:sqlserver://10.10.1.165:1433;DatabaseName=Uniris
+      jdbc-url: jdbc:sqlserver://192.168.0.73:1433;DatabaseName=Uniris
       username: sa
-      password: Hsszyy@120
+      password: Tphy@1234
       driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
       tls-versions:
         - TLSv1.2

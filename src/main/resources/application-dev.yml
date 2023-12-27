@@ -1,14 +1,4 @@
-
 spring:
-  datasource:
-    url: jdbc:sqlserver://123.125.12.107:1433;DatabaseName=peis_qa
-    username: sa
-    password: Tphy@123.
-  sqlserver:
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    tls-versions:
-      - TLSv1.2
-      - TLSv1.3
   pdfbox:
     fontCache:
       enabled: false

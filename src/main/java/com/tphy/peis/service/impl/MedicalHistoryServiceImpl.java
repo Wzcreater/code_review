@@ -72,10 +72,9 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         for (MedicalHistoryItemDetailsResult medicalHistoryItemDetailsResult : medicalHistoryItemDetailsResults) {
             MedicalHistoryItemDetailsResult result1 = new MedicalHistoryItemDetailsResult();
             //复选框类型
-            if(!ObjectUtils.isEmpty(medicalHistoryItemDetailsResult.item_details_sum)
-                    ||(!ObjectUtils.isEmpty(medicalHistoryItemDetailsResult.item_details_text))){
-                result1 = medicalHistoryMapper.selectCheckItemDetailsResult(medicalHistoryItemDetailsResult);
-            }
+
+            result1 = medicalHistoryMapper.selectCheckItemDetailsResult(medicalHistoryItemDetailsResult);
+
             //为空则插入表，不为空则更新表
             if(ObjectUtils.isEmpty(result1)){
                 count = medicalHistoryMapper.insertResult(medicalHistoryItemDetailsResult);

@@ -122,8 +122,8 @@ public interface DjdhsMapper {
      * @param examNum
      * @return
      */
-    @Select("select  top 1 b.user_name  from  exam_info a join  customer_info b on a.customer_id = b. id  where a.exam_num = #{examNum }")
-    String getNameByExamNum(@Param("examNum") String examNum);
+    @Select("select  top 1 * from  exam_info a join  customer_info b on a.customer_id = b. id  where a.exam_num = #{examNum }")
+    List<Map<String,Object>> getNameByExamNum(@Param("examNum") String examNum);
 
     /**
      * 获取项目小项默认值
