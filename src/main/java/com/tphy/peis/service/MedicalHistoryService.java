@@ -28,4 +28,5 @@ public interface MedicalHistoryService {
 
     int saveMedicalHistoryDetails(List<MedicalHistoryItemDetailsResult> medicalHistoryItemDetailsResults);
 
+    List<MedicalHistoryItemDetailsResult> getDetailsResult(String exam_num);
 }

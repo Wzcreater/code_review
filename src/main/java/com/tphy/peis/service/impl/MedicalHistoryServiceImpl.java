@@ -72,12 +72,9 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         for (MedicalHistoryItemDetailsResult medicalHistoryItemDetailsResult : medicalHistoryItemDetailsResults) {
             MedicalHistoryItemDetailsResult result1 = new MedicalHistoryItemDetailsResult();
             //复选框类型
-            if(!ObjectUtils.isEmpty(medicalHistoryItemDetailsResult.item_details_sum)){
+            if(!ObjectUtils.isEmpty(medicalHistoryItemDetailsResult.item_details_sum)
+                    ||(!ObjectUtils.isEmpty(medicalHistoryItemDetailsResult.item_details_text))){
                 result1 = medicalHistoryMapper.selectCheckItemDetailsResult(medicalHistoryItemDetailsResult);
-            }
-            //文本类型
-            else{
-                result1 = medicalHistoryMapper.selectTextItemDetailsResult(medicalHistoryItemDetailsResult);
             }
             //为空则插入表，不为空则更新表
             if(ObjectUtils.isEmpty(result1)){
@@ -88,5 +85,11 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
             }
         }
         return count;
+    }
+
+    @Override
+    public List<MedicalHistoryItemDetailsResult> getDetailsResult(String exam_num) {
+        List<MedicalHistoryItemDetailsResult> results = medicalHistoryMapper.getDetailsResult(exam_num);
+        return results;
     }
 }

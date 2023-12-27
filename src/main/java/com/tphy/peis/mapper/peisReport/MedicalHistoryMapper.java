@@ -27,23 +27,14 @@ public interface MedicalHistoryMapper extends BaseMapper<MedicalHistoryItemDetai
      */
     List<Map<String,Object>> queryMedicalHistoryDetail();
 
+
     /**
-     * 文本类根据小项id查询和exam_num
+     * 根据exam_num以及item_details_id查询
      * @param medicalHistoryItemDetailsResults
      * @return
      */
     @Select("select top 1 * from medical_history_item_details_result " +
             "where exam_num = #{exam_num} and item_details_id = #{item_details_id}")
-    MedicalHistoryItemDetailsResult selectTextItemDetailsResult(MedicalHistoryItemDetailsResult medicalHistoryItemDetailsResults);
-
-
-    /**
-     * 复选框类根据大项id和exam_num以及item_details_sum不为空查询
-     * @param medicalHistoryItemDetailsResults
-     * @return
-     */
-    @Select("select top 1 * from medical_history_item_details_result " +
-            "where exam_num = #{exam_num} and item_id = #{item_id} and item_details_sum is not null")
     MedicalHistoryItemDetailsResult selectCheckItemDetailsResult(MedicalHistoryItemDetailsResult medicalHistoryItemDetailsResults);
 
     @Insert("INSERT INTO [dbo].[medical_history_item_details_result] ([item_details_sum]," +
@@ -52,4 +43,7 @@ public interface MedicalHistoryMapper extends BaseMapper<MedicalHistoryItemDetai
 
     @Update("UPDATE [dbo].[medical_history_item_details_result] SET [item_details_sum] = #{item_details_sum}, [item_details_text] = #{item_details_text}, [item_details_id] = #{item_details_id}, [exam_num] = #{exam_num}, [item_id] = #{item_id} WHERE [id] = #{id};")
     Integer updateResult(MedicalHistoryItemDetailsResult medicalHistoryItemDetailsResults);
+
+    @Select("SELECT * from medical_history_item_details_result where exam_num = #{exam_num} and (item_details_sum in('1') or item_details_text is not null)")
+    List<MedicalHistoryItemDetailsResult> getDetailsResult(@Param("exam_num") String exam_num);
 }

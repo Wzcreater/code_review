@@ -61,4 +61,21 @@ public class MedicalHistoryController {
             return new ErrorResponseData("保存异常");
         }
     }
+
+    /**
+     * 获取指定体检号的所有结果
+     * @param examNum
+     * @return
+     */
+    @GetMapping("/getDetailsResult")
+    public ResponseData getDetailsResult(@RequestParam("examNum")String examNum) {
+        try {
+            List<MedicalHistoryItemDetailsResult> medicalHistoryItemDetailsResults = medicalHistoryService.getDetailsResult(examNum);
+            // 返回处理后的数据
+            return new SuccessResponseData(medicalHistoryItemDetailsResults);
+        } catch (Exception e) {
+            // 处理异常情况
+            return new ErrorResponseData("获取失败");
+        }
+    }
 }

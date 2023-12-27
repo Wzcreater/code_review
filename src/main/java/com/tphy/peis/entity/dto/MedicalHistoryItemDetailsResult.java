@@ -22,4 +22,5 @@ public class MedicalHistoryItemDetailsResult {
     public Integer item_details_id;
     public String exam_num;
     public Integer item_id;
+    public String input_type;
 }

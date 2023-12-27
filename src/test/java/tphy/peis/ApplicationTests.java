@@ -3,6 +3,7 @@ package tphy.peis;
 import cn.hutool.core.date.DateTime;
 import com.tphy.peis.PeisApplication;
 import com.tphy.peis.entity.dto.ExaminfoChargingItemDTO;
+import com.tphy.peis.entity.dto.MedicalHistoryItemDetailsResult;
 import com.tphy.peis.entity.dto.PacsItemDTO;
 import com.tphy.peis.entity.vo.SfxpdyVO;
 import com.tphy.peis.mapper.pacsReport.PacsPdfToJpgMapper;
@@ -180,8 +181,9 @@ class ApplicationTests {
 
     @Test
     void medicalHistory() throws IOException {
-        Integer integer = medicalHistoryMapper.selectCount(null);
-        System.out.println(integer);
-
+       /* Integer integer = medicalHistoryMapper.selectCount(null);
+        System.out.println(integer);*/
+        List<MedicalHistoryItemDetailsResult> detailsResult = medicalHistoryMapper.getDetailsResult("0000000");
+        System.out.println(detailsResult);
     }
 }
