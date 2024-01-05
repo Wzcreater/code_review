@@ -184,7 +184,7 @@ class ApplicationTests {
     void medicalHistory() throws IOException {
         Integer integer = medicalHistoryMapper.selectCount(null);
         System.out.println(integer);
-/*        List<MedicalHistoryItemDetailsResult> detailsResult = medicalHistoryMapper.getDetailsResult("0000000");
-        System.out.println(detailsResult);*/
+        List<MedicalHistoryItemDetailsResult> detailsResult = medicalHistoryMapper.getDetailsResult("0000000");
+        System.out.println(detailsResult);
     }
 }
