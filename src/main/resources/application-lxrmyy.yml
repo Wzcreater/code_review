@@ -21,6 +21,7 @@ spring:
       enabled: false
   scheduled:
     pdfToJpg: 100000000
+    insertJpg: 300000
 
 mybatis-plus:
   type-aliases-package: com.tphy.peis.entity
