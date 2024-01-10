@@ -7,12 +7,12 @@ spring:
           url: jdbc:sqlserver://10.10.1.165:1433;DatabaseName=peis
           type: com.alibaba.druid.pool.DruidDataSource #使用druid数据源
           username: sa
-          password: Tphy@123.
+          password: Hsszyy@120
           driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
         ds2:
           url: jdbc:sqlserver://10.10.1.165:1433;DatabaseName=Uniris
           username: sa
-          password: Tphy@123.
+          password: Hsszyy@120
           driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
           type: com.alibaba.druid.pool.DruidDataSource #使用druid数据源
 
@@ -24,7 +24,7 @@ spring:
     insertJpg: 300000
 mybatis-plus:
   type-aliases-package: com.tphy.peis.entity
-  mapper-locations: /mapper/*.xml
+  mapper-locations: classpath*:**/*Mapper.xml
   configuration:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     cache-enabled: true
