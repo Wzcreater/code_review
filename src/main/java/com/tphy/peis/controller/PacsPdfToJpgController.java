@@ -54,7 +54,7 @@ public class PacsPdfToJpgController {
         log.info("成功转换"+imgs+"张图片");
         return new SuccessResponseData("成功转换"+imgs+"张图片");
     }
-    //@Scheduled(fixedDelayString = "${spring.scheduled.insertJpg}")
+//    @Scheduled(fixedDelayString = "${spring.scheduled.insertJpg}")
     @GetMapping("hsinsertJpg")
     public ResponseData hsinsertJpg() throws IOException {
         LocalDateTime currentTime = LocalDateTime.now();

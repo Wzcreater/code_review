@@ -4,7 +4,6 @@ package com.tphy.peis.mapper.peisReport;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tphy.peis.entity.dto.MedicalHistoryItemDetailsResult;
 import org.apache.ibatis.annotations.*;
-
 import java.util.List;
 import java.util.Map;
 

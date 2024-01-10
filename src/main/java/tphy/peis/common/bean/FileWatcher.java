@@ -20,7 +20,7 @@ public class FileWatcher {
         this.pdfToImageService = pdfToImageService;
     }
 
-    @Scheduled(fixedRate = 60000) // 每分钟执行一次
+//    @Scheduled(fixedRate = 60000) // 每分钟执行一次
     public void processPdfFiles() {
         String pdfFolderPath = "Z:\\pic";
         pdfToImageService.convertPdfToImage(pdfFolderPath);

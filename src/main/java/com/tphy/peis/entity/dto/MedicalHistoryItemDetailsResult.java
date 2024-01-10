@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@ToString
 @TableName("medical_history_item_details_result")
 public class MedicalHistoryItemDetailsResult {
+
     @TableId(type = IdType.AUTO)
     public Integer id;
     public String item_details_sum;

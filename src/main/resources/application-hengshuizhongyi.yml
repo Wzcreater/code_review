@@ -1,3 +1,5 @@
+server:
+  port: 8090
 spring:
   datasource:
     dynamic:
@@ -15,6 +17,12 @@ spring:
           password: Hsszyy@120
           driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
           type: com.alibaba.druid.pool.DruidDataSource #使用druid数据源
+        ds3:
+          url: jdbc:sqlserver://10.10.0.175:1433;DatabaseName=medexmemrsdb
+          username: TJBG
+          password: TJBG
+          driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+          type: com.alibaba.druid.pool.DruidDataSource #使用druid数据源
 
   pdfbox:
     fontCache:
@@ -22,6 +30,9 @@ spring:
   scheduled:
     pdfToJpg: 100000000
     insertJpg: 300000
+    ecgSave: 300000
+
+
 mybatis-plus:
   type-aliases-package: com.tphy.peis.entity
   mapper-locations: classpath*:**/*Mapper.xml
@@ -33,16 +44,12 @@ mybatis-plus:
     map-underscore-to-camel-case: false
 # 日志等级
 logging:
-  file:
-    path: Z:\MyDownload\java\TPHY_UB_PEIS\logs
   level:
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
     com.baomidou.mybatisplus: DEBUG
     com.dragonsoft.demojar.mapper: DEBUG
     org.apache.fontbox.ttf.TTFParser: ERROR
     org.apache.pdfbox: OFF
-server:
-  port: 8090
 
 djd:
   kf: 内科,外科,耳鼻喉科,口腔科,眼科,妇科

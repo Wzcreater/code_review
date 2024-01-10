@@ -26,12 +26,12 @@ import java.util.List;
 public class SfxpdyController {
 
     @Autowired
-    SfxpdyService service;
+    SfxpdyService sfxpdyService;
     @PostMapping("/getInfo")
     public ResponseData getInfo(@RequestBody SfxpdyDTO params) {
         System.out.println(params.getExamNum()+params.getItemCodeList());
         try {
-            SfxpdyVO sfxpdyVO = service.getInfo(params.getExamNum(),params.getItemCodeList());
+            SfxpdyVO sfxpdyVO = sfxpdyService.getInfo(params.getExamNum(),params.getItemCodeList());
             // 返回处理后的数据
             return new SuccessResponseData(sfxpdyVO);
         } catch (Exception e) {

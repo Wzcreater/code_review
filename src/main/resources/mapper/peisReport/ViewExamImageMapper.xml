@@ -43,7 +43,4 @@
                                                                      and CONVERT(DATETIME, finaltime, 120) >= DATEADD(DAY, -#{ddate}, GETDATE());
     </select>
 
-    <!--    <select id="queryHsPacsView">
-
-        </select>-->
 </mapper>
