@@ -30,7 +30,7 @@ spring:
   scheduled:
     pdfToJpg: 100000000
     insertJpg: 300000
-    ecgSave: 300000
+    ecgSave: 380000
 
 
 mybatis-plus:

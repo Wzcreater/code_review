@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -126,17 +130,66 @@ public class ThirdECGServiceImpl implements ThirdECGService {
     }
 
     /**
-     * 下载心电图报告
+     * 下载心电图报告并将图片由横版转为竖版
      */
     private void downloadEcgReport(String reqCode, String reportUrl, String patientId) {
+        // 存储路径
         String patientDirectory = saveFile(patientId);
         String outputFile = patientDirectory + File.separator + reqCode + ".jpg";
 
-        try (InputStream in = new URL(reportUrl).openStream()) {
-            Files.copy(in, Paths.get(outputFile), StandardCopyOption.REPLACE_EXISTING);
+//        try (InputStream in = new URL(reportUrl).openStream()) {
+//            Files.copy(in, Paths.get(outputFile), StandardCopyOption.REPLACE_EXISTING);
+//        } catch (IOException e) {
+//            log.error("下载心电图报告异常: {}", e.getMessage(), e);
+//        }
+        try {
+            // 创建URL对象
+            URL url = new URL(reportUrl);
+
+            // 读取图片
+            BufferedImage originalImage = ImageIO.read(url);
+
+            // 通过旋转来创建一个新的图片以得到竖版效果
+            BufferedImage rotatedImage = rotateImageByNinetyDeg(originalImage);
+
+            // 写入旋转后的图片到输出文件
+            ImageIO.write(rotatedImage, "jpg", new File(outputFile));
         } catch (IOException e) {
-            log.error("下载心电图报告异常: {}", e.getMessage(), e);
+            log.error("下载并转换心电图报告异常: {}", e.getMessage(), e);
         }
+    }
+
+    /**
+     * 将图片旋转90度
+     * @param originalImage 原始横版图片
+     * @return 旋转后的竖版图片
+     */
+    private BufferedImage rotateImageByNinetyDeg(BufferedImage originalImage) {
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+
+        // 创建一个新的无图像BufferedImage对象，大小为原图高宽调换
+        BufferedImage rotatedImage = new BufferedImage(height, width, originalImage.getType());
+
+        // 创建一个新的图形上下文
+        Graphics2D graphics = (Graphics2D) rotatedImage.getGraphics();
+
+        // 创建仿射变换，先进行90度旋转（顺时针），然后平移以确保图像内容完全显示
+        AffineTransform transform = new AffineTransform();
+        // 注意：这里的平移操作调整为了图片的高度width（因为转了90度后，原来的宽度变成了高度）
+        // 并且宽度height（因为转了90度后，原来的高度变成了宽度）
+        transform.translate(height / 2.0, width / 2.0);
+        transform.rotate(Math.PI / 2);
+        transform.translate(-width / 2.0, -height / 2.0);
+
+        // 将变换应用到图形上下文
+        graphics.transform(transform);
+
+        // 绘制并释放资源
+        graphics.drawImage(originalImage, 0, 0, null);
+        graphics.dispose();
+
+        return rotatedImage;
     }
 
 

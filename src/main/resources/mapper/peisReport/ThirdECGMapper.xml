@@ -16,7 +16,7 @@
     </insert>
 
 
-    <!--            where PATIENT_ID = '92401050001'-->
+
     <select id="getPacsEcgData" resultType="com.tphy.peis.entity.dto.ThirdEcgApplyDTO">
         select *
         from PACS_APPLY
@@ -28,14 +28,14 @@
     <!--    &#45;&#45;         where exam_num = #{examNum}-->
     <!--    &#45;&#45;           and REQ_NO = #{reqNo}-->
 
-    <!--    SELECT top 1-->
-    <!--    '92310070006'                                          AS EXAM_NUM, '02401050001' AS REQ_NO,-->
-    <!--    '2024-01-04 11:22:00'                                  AS REPORT_DATETIME,-->
-    <!--    '测试结论'                                             AS CONCLUSIONS,-->
-    <!--    '测试医生'                                             AS REPORT_DOCTORNAME,-->
-    <!--    '已检查'                                               AS EXAM_STATUS,-->
-    <!--    'http://123.125.12.107/peisreport/PDF/92307250489.jpg' AS REPORT_URL-->
-    <!--    from ReportPDF-->
+<!--    SELECT top 1-->
+<!--    '92310070006'                                          AS EXAM_NUM, '02401050001' AS REQ_NO,-->
+<!--    '2024-01-04 11:22:00'                                  AS REPORT_DATETIME,-->
+<!--    '测试结论'                                             AS CONCLUSIONS,-->
+<!--    '测试医生'                                             AS REPORT_DOCTORNAME,-->
+<!--    '已检查'                                               AS EXAM_STATUS,-->
+<!--    'http://123.125.12.107/peisreport/PDF/92307250489.jpg' AS REPORT_URL-->
+<!--    from ReportPDF-->
     <select id="getPacsEcgResult" resultType="com.tphy.peis.entity.dto.ThirdEcgResultDTO">
 
 
@@ -48,36 +48,14 @@
 
     <select id="saveEcgData" resultType="hashmap" statementType="CALLABLE" parameterType="hashmap">
         exec proc_report_auto_save_common
-        @exam_num=
-        #{exam_num,jdbcType=VARCHAR},
-        @
-        item_code
-        =
-        #{item_code,jdbcType=VARCHAR},
-        @
-        study_type
-        =
-        #{study_type,jdbcType=VARCHAR},
-        @
-        check_doct
-        =
-        #{check_doct,jdbcType=VARCHAR},
-        @
-        check_date
-        =
-        #{check_date,jdbcType=DATE},
-        @
-        Diagnose
-        =
-        #{Diagnose,jdbcType=VARCHAR},
-        @
-        check_desc
-        =
-        #{check_desc,jdbcType=VARCHAR},
-        @
-        error_code
-        =
-        #{error_code,jdbcType=VARCHAR}
+        @exam_num=#{exam_num,jdbcType=VARCHAR},
+        @item_code=#{item_code,jdbcType=VARCHAR},
+        @study_type=#{study_type,jdbcType=VARCHAR},
+        @check_doct=#{check_doct,jdbcType=VARCHAR},
+        @check_date=#{check_date,jdbcType=DATE},
+        @Diagnose=#{Diagnose,jdbcType=VARCHAR},
+        @check_desc=#{check_desc,jdbcType=VARCHAR},
+        @error_code=#{error_code,jdbcType=VARCHAR}
     </select>
 
 
