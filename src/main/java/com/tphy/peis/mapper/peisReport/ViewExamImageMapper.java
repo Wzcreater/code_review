@@ -28,6 +28,16 @@ public interface ViewExamImageMapper {
     List<String> queryImagePathByExamNumAndReqCode(@Param("examNum") String examNum, @Param("reqCode") String reqCode);
 
     /**
+     * 根据体检号和reqCode查询删除图片路径 DeleteImagePathByExamNumAndReqCode
+     * @param examNum
+     * @param reqCode
+     * @return
+     */
+    @Select("DELETE  from view_exam_image  WHERE exam_num = #{examNum} and pacs_req_code = #{reqCode}")
+    Integer deleteImagePathByExamNumAndReqCode(@Param("examNum") String examNum, @Param("reqCode") String reqCode);
+
+
+    /**
      * 调用触发器进行图片路径存储 procReportAutoSave
      * @param
      * @return

@@ -22,7 +22,7 @@ public class ThirdECGController {
     private ThirdECGService thirdECGService;
 
 
-    @Scheduled(fixedDelayString = "${spring.scheduled.ecgSave}")
+    //@Scheduled(fixedDelayString = "${spring.scheduled.ecgSave}")
     @GetMapping("ecgData")
     public void ecgData() {
         try {

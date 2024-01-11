@@ -1,10 +1,9 @@
 package com.tphy.peis.mapper.peisReport;
 
 import com.tphy.peis.entity.dto.PacsItemDTO;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.tphy.peis.entity.dto.PacsSqdInfo;
+import com.tphy.peis.entity.dto.PeisToPacsGetReportDTO;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -24,4 +23,20 @@ public interface PeisApplyToPacsMapper {
     boolean insertExamItemTrans(@Param("examNum") String examNum,
                                 @Param("chargingItemId") String chargingItemId,
                                 @Param("chargingItemCode") String chargingItemCode);
+
+
+    @Select("SELECT patientName, sex, birthday, hisId, admIdIss, admId, accessionNo, applyDepartmentStr, applyDoctor, applyHospital, applyHospitalFk, Modality, checkItemName, extNo\n" +
+            "FROM v_tphy_pacs_sqd_info where accessionNo = #{accessionNo} and admId =#{admId} ")
+    List<PacsSqdInfo> getPacsSqdhInfo(@Param("accessionNo") String accessionNo,@Param("admId") String admId);
+
+    Integer updateItemStatus(@Param("accessionNo") String accessionNo, @Param("admId") String admId);
+
+    Integer insertPacsResutl(PeisToPacsGetReportDTO peisToPacsGetReportDTO);
+
+    Integer updateItemStatusToY(@Param("accessionNo") String accessionNo, @Param("admId") String admId);
+
+    @Select("SELECT count(1) from pacs_result where exam_num =#{admId} and req_no =#{accessionNo}")
+    Integer getPacsResultCount(PeisToPacsGetReportDTO peisToPacsGetReportDTO);
+
+    Integer updatePacsResutl(PeisToPacsGetReportDTO peisToPacsGetReportDTO);
 }

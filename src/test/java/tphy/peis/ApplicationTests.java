@@ -5,6 +5,7 @@ import com.tphy.peis.PeisApplication;
 import com.tphy.peis.entity.dto.ExaminfoChargingItemDTO;
 import com.tphy.peis.entity.dto.MedicalHistoryItemDetailsResult;
 import com.tphy.peis.entity.dto.PacsItemDTO;
+import com.tphy.peis.entity.dto.PacsSqdInfo;
 import com.tphy.peis.entity.vo.SfxpdyVO;
 import com.tphy.peis.mapper.pacsReport.PacsPdfToJpgMapper;
 import com.tphy.peis.mapper.pacsReport.SystemUserMapper;
@@ -186,5 +187,15 @@ class ApplicationTests {
         System.out.println(integer);
         List<MedicalHistoryItemDetailsResult> detailsResult = medicalHistoryMapper.getDetailsResult("0000000");
         System.out.println(detailsResult);
+    }
+    @Test
+    void peisApplyToPacs(){
+        /*List<PacsSqdInfo> pacsSqdhInfo = peisApplyToPacsMapper.getPacsSqdhInfo("02310300002", "92310300001");
+        for (PacsSqdInfo sqdInfo : pacsSqdhInfo) {
+            System.out.println(sqdInfo.toString());
+        }*/
+/*
+        Integer integer = peisApplyToPacsMapper.updateItemStatus("02310300002", "92310300001");
+        System.out.println(integer);*/
     }
 }

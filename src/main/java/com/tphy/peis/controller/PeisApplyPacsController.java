@@ -5,6 +5,8 @@ import com.tphy.peis.conf.reponse.ErrorResponseData;
 import com.tphy.peis.conf.reponse.ResponseData;
 import com.tphy.peis.conf.reponse.SuccessResponseData;
 import com.tphy.peis.entity.dto.PacsItemDTO;
+import com.tphy.peis.entity.dto.PeisToPacsGetReportDTO;
+import com.tphy.peis.entity.dto.PeisToPacsSqdjDTO;
 import com.tphy.peis.service.PacsPdfToJpgService;
 import com.tphy.peis.service.PeisApplyToPacsService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +20,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.tphy.peis.conf.reponse.ResponseData.*;
+
 /**
  * Copyright (C) 2023  北京天鹏恒宇科技发展有限公司 版权所有
  * Copyright (C) 2023  TPHY.Co.,Ltd.  All rights reserved
  *
  * @Author wangzhen
  * @ClassName
- * @Description 体检系统加项减项时向Pacs系统发送请求 Controller
- * @Date 2023-11-09
+ * @Description peis体检系统提供给pacs的对接接口
+ * @Date 2024-01-10
  * @Version 1.0
  **/
 @Transactional
@@ -83,6 +87,48 @@ public class PeisApplyPacsController {
         return new SuccessResponseData("获取失败");
     }
 
+    /**
+     * pacs登记后调用peis系统接口修改项目登记状态
+     * @param peisToPacsSqdjDTO
+     * @return
+     */
+    @PostMapping("updateStatus")
+    public ResponseData updateStatus(@RequestBody PeisToPacsSqdjDTO peisToPacsSqdjDTO){
+        try {
+            String msg = peisApplyToPacsService.updateStatus(peisToPacsSqdjDTO);
+            String[] split = msg.split("-");
+            if(split[1].equals("ok")){
+                return new SuccessResponseData(DEFAULT_SUCCESS_CODE,split[0],"");
+            }
+            else {
+                return new ErrorResponseData(DEFAULT_NOT_FOUND_CODE,split[0]);
+            }
+        } catch (Exception e) {
+            return new ErrorResponseData(DEFAULT_ERROR_CODE,"登记异常："+e.toString());
+        }
+    }
 
 
+
+    /**
+     * pacs审核后调用peis系统接口提供报告、检查所见、检查意见；更新检查状态为已检查 （exam_status = Y）
+     * @param
+     * @return
+     */
+    @Transactional
+    @PostMapping("postReport")
+    public ResponseData postReport(@RequestBody PeisToPacsGetReportDTO peisToPacsGetReportDTO) {
+        try {
+            String msg = peisApplyToPacsService.postReport(peisToPacsGetReportDTO);
+            String[] split = msg.split("-");
+            if(split[1].equals("ok")){
+                return new SuccessResponseData(DEFAULT_SUCCESS_CODE,split[0],"");
+            }
+            else {
+                return new ErrorResponseData(DEFAULT_NOT_FOUND_CODE,split[0]);
+            }
+        } catch (Exception e) {
+            return new ErrorResponseData(DEFAULT_ERROR_CODE,"推送异常："+e.toString());
+        }
+    }
 }

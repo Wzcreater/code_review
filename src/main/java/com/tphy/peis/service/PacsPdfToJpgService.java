@@ -19,7 +19,6 @@ import java.util.Map;
  * @Version 1.0
  **/
 @Mapper
-@Qualifier("secondaryDataSource")
 public interface PacsPdfToJpgService {
     /**
      * 根据所有体检回传数据 getReportData

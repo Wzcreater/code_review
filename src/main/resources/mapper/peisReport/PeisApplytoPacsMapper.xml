@@ -2,6 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tphy.peis.mapper.peisReport.PeisApplyToPacsMapper">
+    <insert id="insertPacsResutl" parameterType="com.tphy.peis.entity.dto.PeisToPacsGetReportDTO">
+        insert into pacs_result
+        (req_no,pacs_checkno,exam_num,clinic_diagnose,clinic_symptom,
+         is_abnormal,report_img_path,study_state,check_doc,check_date,report_doc,report_date,
+         audit_doc,audit_date,create_time,exam_center_num
+        )values(
+                #{accessionNo},#{patientName},#{admId},#{result},#{eyesee},#{isReportCrisis}
+        ,null,5,#{checkDoctor},#{checkTime},#{doctorNameR},#{reportTime},#{doctorNameR},#{reportTime},
+                getDate(),'20201100037001'
+        )
+    </insert>
+    <update id="updateItemStatus">
+
+        update examinfo_charging_item  set exam_status ='C'
+        where charging_Item_code in (
+            select chargingItem_num from pacs_detail 
+            where examinfo_num =#{admId} and pacs_req_code = #{accessionNo}
+        )
+         and exam_num = #{admId}
+         AND pay_status IN ('R', 'Y')
+         AND exam_status = 'N'
+         AND isActive ='Y'
+    </update>
+    <update id="updateItemStatusToY">
+        update examinfo_charging_item  set exam_status ='Y'
+        where charging_Item_code in (
+            select chargingItem_num from pacs_detail
+            where examinfo_num =#{admId} and pacs_req_code = #{accessionNo}
+        )
+          and exam_num = #{admId}
+          AND pay_status IN ('R', 'Y')
+          AND exam_status = 'C'
+          AND isActive ='Y'
+    </update>
+    <update id="updatePacsResutl" parameterType="com.tphy.peis.entity.dto.PeisToPacsGetReportDTO">
+        UPDATE view_exam_detail
+        SET
+            exam_result = #{result},
+            exam_desc = #{eyesee},
+            create_time = GETDATE()
+        WHERE
+         exam_num = #{admId} and pacs_req_code = #{accessionNo}
+    </update>
 
     <select id="getPacsItems" resultType="com.tphy.peis.entity.dto.PacsItemDTO">
         select
@@ -47,4 +90,5 @@
         where a.isActive = 'Y' and a.pay_status in ('Y','R') and a.exam_num = #{examNum} and a.charging_item_code = #{chargingItemCode}
 
     </select>
+
 </mapper>

@@ -123,7 +123,7 @@ public interface DjdhsMapper {
      * @return
      */
     @Select("select  top 1 * from  exam_info a join  customer_info b on a.customer_id = b. id  where a.exam_num = #{examNum }")
-    List<Map<String,Object>> getNameByExamNum(@Param("examNum") String examNum);
+    List<Map<String,Object>> getExamInfoByExamNum(@Param("examNum") String examNum);
 
     /**
      * 获取项目小项默认值
