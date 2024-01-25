@@ -4,6 +4,7 @@
 <mapper namespace="com.tphy.peis.mapper.peisReport.MedicalHistoryMapper">
 
 
+
     <select id="queryMedicalHistoryDetail" resultType="java.util.Map">
         SELECT
             mi.item_name,
@@ -19,12 +20,14 @@
         FROM
             medical_history_major_items mi
                 LEFT JOIN medical_history_item_details hid ON mi.id = hid.item_id
+                LEFT JOIN medical_history_hospital mhh ON mhh.id = mi.hospital_id
         WHERE
             mi.is_Active = 'Y'
           AND hid.is_active = 'Y'
+          AND mhh.isActive = 'Y'
         ORDER BY
             mi.item_queue_number ASC,
-            hid.detail_queue_number ASC;
+            hid.detail_queue_number ASC
 
     </select>
 
