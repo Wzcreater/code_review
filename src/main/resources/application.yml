@@ -1,9 +1,9 @@
 spring:
   profiles:
     #active: dev
-    #active: hengshuizhongyi
+    active: hengshuizhongyi
     #active: lxrmyy
-    active: zlxzyy
+    #active: zlxzyy
 
 
 
