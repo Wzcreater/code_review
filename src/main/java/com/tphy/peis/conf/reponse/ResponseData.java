@@ -11,6 +11,10 @@ public class ResponseData {
     public static final Integer DEFAULT_ERROR_CODE = 500;
     public static final String DEFAULT_NO_PERMISSION = "无权访问";
     public static final Integer DEFAULT_NO_PERMISSION_CODE = 403;
+    // 代表资源未找到状态码
+    public static final Integer DEFAULT_NOT_FOUND_CODE = 404;
+    // 资源未找到时的默认提示信息
+    public static final String DEFAULT_NOT_FOUND_MESSAGE = "资源未找到";
 
     private Boolean success;
     private Integer code;
